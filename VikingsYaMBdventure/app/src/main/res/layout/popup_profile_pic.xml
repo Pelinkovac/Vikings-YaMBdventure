@@ -16,5 +16,11 @@
         android:layout_gravity="end"
         android:gravity="center"
         android:background="@drawable/circlebackground"/>
+    <in.goodiebag.carouselpicker.CarouselPicker
+        android:id="@+id/carouselPicker"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
 
 </LinearLayout>

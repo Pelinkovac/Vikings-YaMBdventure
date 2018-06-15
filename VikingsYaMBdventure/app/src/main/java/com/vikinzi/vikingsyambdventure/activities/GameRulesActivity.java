@@ -1,13 +1,12 @@
-package com.vikinzi.vikingsyambdventure;
+package com.vikinzi.vikingsyambdventure.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
-import android.widget.ImageView;
-import android.view.View;
+
+import com.vikinzi.vikingsyambdventure.R;
 
 
-public class GameRules extends AppCompatActivity {
+public class GameRulesActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -1,10 +1,12 @@
-package com.vikinzi.vikingsyambdventure;
+package com.vikinzi.vikingsyambdventure.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.vikinzi.vikingsyambdventure.R;
 
-public class Properties extends AppCompatActivity {
+
+public class PropertiesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

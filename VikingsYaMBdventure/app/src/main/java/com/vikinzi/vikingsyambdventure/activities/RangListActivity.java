@@ -1,12 +1,14 @@
-package com.vikinzi.vikingsyambdventure;
+package com.vikinzi.vikingsyambdventure.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.graphics.Typeface;
 
+import com.vikinzi.vikingsyambdventure.R;
 
-public class RangList extends AppCompatActivity
+
+public class RangListActivity extends AppCompatActivity
 {
     private TextView mRangList;
 

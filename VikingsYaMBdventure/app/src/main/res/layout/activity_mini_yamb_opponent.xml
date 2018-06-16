@@ -5,16 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bcg"
-    tools:context="com.vikinzi.vikingsyambdventure.activities.MiniYamb">
+    tools:context=".MiniYambOpponent">
+
 
 <android.support.constraint.ConstraintLayout
     android:id="@+id/yamb_paper"
-    android:layout_width="@dimen/_240sdp"
-    android:layout_height="@dimen/_376sdp"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_380sdp"
+    android:layout_marginStart="@dimen/_30sdp"
+    android:layout_marginLeft="@dimen/_10sdp"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/layout_dices"
+    android:layout_marginTop="@dimen/_5sdp"
     >
     <!-- First column - images -->
     <android.support.constraint.ConstraintLayout
@@ -307,7 +310,7 @@
     <!-- 3. column - up -->
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_up"
-        android:layout_width="@dimen/_40sdp"
+        android:layout_width="44dp"
         android:layout_height="@dimen/_376sdp"
         tools:layout_editor_absoluteX="96dp"
         app:layout_constraintLeft_toRightOf="@+id/layout_down">
@@ -789,13 +792,13 @@
     <!-- 6. column - sum and helps -->
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_yamb"
-        android:layout_width="@dimen/_40sdp"
+        android:layout_width="@dimen/_80sdp"
         android:layout_height="@dimen/_376sdp"
         app:layout_constraintLeft_toRightOf="@+id/layout_hand">
 
         <ImageView
-            android:id="@+id/img_help"
-            android:background="@drawable/img_help"
+            android:id="@+id/img_yamb2"
+            android:background="@drawable/polje"
             android:layout_height="@dimen/_22sdp"
             android:layout_width="@dimen/_40sdp" />
 
@@ -804,7 +807,7 @@
             android:background="@drawable/polje"
             android:layout_height="@dimen/_133sdp"
             android:layout_width="@dimen/_40sdp"
-            app:layout_constraintTop_toBottomOf="@id/img_help"/>
+            app:layout_constraintTop_toBottomOf="@id/img_yamb2"/>
 
         <TextView
             android:id="@+id/yamb_sum1"
@@ -855,106 +858,53 @@
 
 </android.support.constraint.ConstraintLayout>
 
-    <!-- Footer for dices and etc -->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/layout_dices"
-        android:layout_width="@dimen/_135sdp"
-        android:layout_height="@dimen/_90sdp"
-        app:layout_constraintTop_toBottomOf="@id/yamb_paper"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <!--app:layout_constraintRight_toLeftOf="@+id/play">-->
+<!-- Footer for dices and etc -->
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/layout_dices"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_100sdp"
+    app:layout_constraintTop_toBottomOf="@id/yamb_paper"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:layout_marginLeft="@dimen/_10sdp">
 
-        <ImageView
-            android:id="@+id/dice1"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/unknown"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/dice4"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/dice2"/>
-        <ImageView
-            android:id="@+id/dice2"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/unknown"
-            app:layout_constraintLeft_toRightOf="@id/dice1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/dice5"
-            app:layout_constraintRight_toLeftOf="@+id/dice3"/>
-        <ImageView
-            android:id="@+id/dice3"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/unknown"
-            app:layout_constraintLeft_toRightOf="@id/dice2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/dice6"
-            app:layout_constraintRight_toRightOf="parent"/>
-        <ImageView
-            android:id="@+id/dice4"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/unknown"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dice1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/dice5"
-            />
-        <ImageView
-            android:id="@+id/dice5"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/unknown"
-            app:layout_constraintTop_toBottomOf="@id/dice2"
-            app:layout_constraintLeft_toRightOf="@id/dice4"
-            app:layout_constraintRight_toLeftOf="@id/dice6"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-        <ImageView
-            android:id="@+id/dice6"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/unknown"
-            app:layout_constraintTop_toBottomOf="@id/dice3"
-            app:layout_constraintLeft_toRightOf="@id/dice5"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-    </android.support.constraint.ConstraintLayout>
+    <android.support.constraint.Guideline
+        android:id="@+id/hguideline"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"/>
 
-        <ImageView
-            android:id="@+id/play"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:src="@drawable/play"
-            app:layout_constraintLeft_toRightOf="@+id/layout_dices"
-            app:layout_constraintRight_toLeftOf="@+id/profile"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/yamb_paper"/>
+    <android.support.constraint.Guideline
+        android:id="@+id/hguideline3"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"/>
 
-        <TextView
-            android:id="@+id/yamb_sumtotal"
-            android:background="@drawable/sum_style"
-            android:layout_height="@dimen/_22sdp"
-            android:layout_width="@dimen/_80sdp"
-            android:gravity="center"
-            android:textStyle="bold"
-            app:layout_constraintRight_toRightOf="@id/yamb_paper"
-            app:layout_constraintTop_toBottomOf="@+id/yamb_paper"
-            app:layout_constraintBottom_toTopOf="@+id/profile"
-            />
+    <TextView
+        android:id="@+id/yamb_sumtotal"
+        android:background="@drawable/sum_style"
+        android:layout_height="@dimen/_22sdp"
+        android:layout_width="@dimen/_80sdp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginRight="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="@id/layout_dices"
+        />
 
-        <ImageView
-            android:id="@+id/profile"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp"
-            android:src="@drawable/avatar"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/play"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/yamb_sumtotal"/>
+    <ImageView
+        android:id="@+id/profile"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        android:src="@drawable/avatar"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:layout_constraintLeft_toRightOf="@id/play"
+        app:layout_constraintTop_toBottomOf="@+id/yamb_sumtotal"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
+
+</android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -752,7 +752,7 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:background="@drawable/kockica_upitnik"
+            android:background="@drawable/unknown"
             android:textColor="@android:color/transparent"
             android:textIsSelectable="false" />
 
@@ -761,7 +761,7 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:background="@drawable/kockica_upitnik"
+            android:background="@drawable/unknown"
             android:textColor="@android:color/transparent"
             android:textIsSelectable="false"
             app:layout_constraintLeft_toRightOf="@id/dice1" />
@@ -771,7 +771,7 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:background="@drawable/kockica_upitnik"
+            android:background="@drawable/unknown"
             android:textColor="@android:color/transparent"
             android:textIsSelectable="false"
             app:layout_constraintLeft_toRightOf="@id/dice2" />
@@ -781,7 +781,7 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:background="@drawable/kockica_upitnik"
+            android:background="@drawable/unknown"
             android:textColor="@android:color/transparent"
             android:textIsSelectable="false"
             app:layout_constraintTop_toBottomOf="@id/dice1" />
@@ -791,7 +791,7 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:background="@drawable/kockica_upitnik"
+            android:background="@drawable/unknown"
             android:textColor="@android:color/transparent"
             android:textIsSelectable="false"
             app:layout_constraintLeft_toRightOf="@id/dice4"
@@ -802,7 +802,7 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:background="@drawable/kockica_upitnik"
+            android:background="@drawable/unknown"
             android:textColor="@android:color/transparent"
             android:textIsSelectable="false"
             app:layout_constraintLeft_toRightOf="@id/dice5"

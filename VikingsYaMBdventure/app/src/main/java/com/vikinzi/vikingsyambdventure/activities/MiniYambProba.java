@@ -1,6 +1,5 @@
 package com.vikinzi.vikingsyambdventure.activities;
 
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -125,7 +124,7 @@ public class MiniYambProba extends AppCompatActivity {
         for(int i = 0; i < 6; i++) {
             kockice[i].setSelected(false);
             kockice[i].setClickable(false);
-            kockice[i].setBackgroundResource(R.drawable.kockica_upitnik);
+            kockice[i].setBackgroundResource(R.drawable.unknown);
         }
         play.setBackgroundResource(R.drawable.play1);
         play.setText("0");

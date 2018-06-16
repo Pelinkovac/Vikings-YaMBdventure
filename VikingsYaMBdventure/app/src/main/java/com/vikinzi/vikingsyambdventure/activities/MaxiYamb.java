@@ -13,8 +13,9 @@ import com.vikinzi.vikingsyambdventure.R;
 
 import java.util.Random;
 
-public class MiniYamb extends AppCompatActivity  implements
+public class MaxiYamb extends AppCompatActivity implements
         View.OnClickListener {
+
     //TextView obj for 1. column - down
     TextView down_1;
     TextView down_2;
@@ -75,6 +76,36 @@ public class MiniYamb extends AppCompatActivity  implements
     TextView hand_poker;
     TextView hand_yamb;
 
+    //TextView obj for 5. column - from center
+    TextView center_1;
+    TextView center_2;
+    TextView center_3;
+    TextView center_4;
+    TextView center_5;
+    TextView center_6;
+    TextView center_max;
+    TextView center_min;
+    TextView center_straight;
+    TextView center_three;
+    TextView center_full;
+    TextView center_poker;
+    TextView center_yamb;
+
+    //TextView obj for 6. column - from sides
+    TextView sides_1;
+    TextView sides_2;
+    TextView sides_3;
+    TextView sides_4;
+    TextView sides_5;
+    TextView sides_6;
+    TextView sides_max;
+    TextView sides_min;
+    TextView sides_straight;
+    TextView sides_three;
+    TextView sides_full;
+    TextView sides_poker;
+    TextView sides_yamb;
+
     ImageView dice1;
     ImageView dice2;
     ImageView dice3;
@@ -88,7 +119,7 @@ public class MiniYamb extends AppCompatActivity  implements
 
     //Arrays for TextViews values of all columns
     int count = 13;
-    int[] arrayDown, arrayUp, arrayFree, arrayHand, arrayDicesValue;
+    int[] arrayDown, arrayUp, arrayFree, arrayHand, arrayCenter, arraySides, arrayDicesValue;
     boolean[] arrayDicesState;
     int numOfThrows = 0;
     //   boolean played = false;
@@ -98,7 +129,7 @@ public class MiniYamb extends AppCompatActivity  implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mini_yamb);
+        setContentView(R.layout.activity_maxi_yamb);
 
         initLayout();
         initListeners();
@@ -161,6 +192,34 @@ public class MiniYamb extends AppCompatActivity  implements
         hand_full = (TextView) findViewById(R.id.hand_full);
         hand_poker = (TextView) findViewById(R.id.hand_poker);
         hand_yamb = (TextView) findViewById(R.id.hand_yamb);
+
+        center_1 = (TextView) findViewById(R.id.center_1);
+        center_2 = (TextView) findViewById(R.id.center_2);
+        center_3 = (TextView) findViewById(R.id.center_3);
+        center_4 = (TextView) findViewById(R.id.center_4);
+        center_5 = (TextView) findViewById(R.id.center_5);
+        center_6 = (TextView) findViewById(R.id.center_6);
+        center_max = (TextView) findViewById(R.id.center_max);
+        center_min = (TextView) findViewById(R.id.center_min);
+        center_straight = (TextView) findViewById(R.id.center_straight);
+        center_three = (TextView) findViewById(R.id.center_three);
+        center_full = (TextView) findViewById(R.id.center_full);
+        center_poker = (TextView) findViewById(R.id.center_poker);
+        center_yamb = (TextView) findViewById(R.id.center_yamb);
+
+        sides_1 = (TextView) findViewById(R.id.sides_1);
+        sides_2 = (TextView) findViewById(R.id.sides_2);
+        sides_3 = (TextView) findViewById(R.id.sides_3);
+        sides_4 = (TextView) findViewById(R.id.sides_4);
+        sides_5 = (TextView) findViewById(R.id.sides_5);
+        sides_6 = (TextView) findViewById(R.id.sides_6);
+        sides_max = (TextView) findViewById(R.id.sides_max);
+        sides_min = (TextView) findViewById(R.id.sides_min);
+        sides_straight = (TextView) findViewById(R.id.sides_straight);
+        sides_three = (TextView) findViewById(R.id.sides_three);
+        sides_full = (TextView) findViewById(R.id.sides_full);
+        sides_poker = (TextView) findViewById(R.id.sides_poker);
+        sides_yamb = (TextView) findViewById(R.id.sides_yamb);
 
         dice1 = (ImageView) findViewById(R.id.dice1);
         dice2 = (ImageView) findViewById(R.id.dice2);
@@ -230,8 +289,35 @@ public class MiniYamb extends AppCompatActivity  implements
         hand_poker.setOnClickListener(this);
         hand_yamb.setOnClickListener(this);
 
-        dice1.setOnClickListener(this);
+        center_1.setOnClickListener(this);
+        center_2.setOnClickListener(this);
+        center_3.setOnClickListener(this);
+        center_4.setOnClickListener(this);
+        center_5.setOnClickListener(this);
+        center_6.setOnClickListener(this);
+        center_max.setOnClickListener(this);
+        center_min.setOnClickListener(this);
+        center_straight.setOnClickListener(this);
+        center_three.setOnClickListener(this);
+        center_full.setOnClickListener(this);
+        center_poker.setOnClickListener(this);
+        center_yamb.setOnClickListener(this);
 
+        sides_1.setOnClickListener(this);
+        sides_2.setOnClickListener(this);
+        sides_3.setOnClickListener(this);
+        sides_4.setOnClickListener(this);
+        sides_5.setOnClickListener(this);
+        sides_6.setOnClickListener(this);
+        sides_max.setOnClickListener(this);
+        sides_min.setOnClickListener(this);
+        sides_straight.setOnClickListener(this);
+        sides_three.setOnClickListener(this);
+        sides_full.setOnClickListener(this);
+        sides_poker.setOnClickListener(this);
+        sides_yamb.setOnClickListener(this);
+
+        dice1.setOnClickListener(this);
         dice2.setOnClickListener(this);
         dice3.setOnClickListener(this);
         dice4.setOnClickListener(this);
@@ -320,19 +406,19 @@ public class MiniYamb extends AppCompatActivity  implements
             arrayDicesState[i]=true;
             arrayDicesValue[i]=0;
         }
-        GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
+        GlideApp.with(MaxiYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(dice1);
-        GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
+        GlideApp.with(MaxiYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(dice2);
-        GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
+        GlideApp.with(MaxiYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(dice3);
-        GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
+        GlideApp.with(MaxiYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(dice4);
-        GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
+        GlideApp.with(MaxiYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(dice5);
-        GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
+        GlideApp.with(MaxiYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(dice6);
-        GlideApp.with(MiniYamb.this).load(R.drawable.play).diskCacheStrategy(DiskCacheStrategy.NONE)
+        GlideApp.with(MaxiYamb.this).load(R.drawable.play).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(play);
         firstTurn = false;
     }
@@ -345,32 +431,32 @@ public class MiniYamb extends AppCompatActivity  implements
             if (arrayDicesState[i] && imageView != null) {
                 switch (n) {
                     case 1: {
-                        GlideApp.with(MiniYamb.this).load(R.drawable.orange1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        GlideApp.with(MaxiYamb.this).load(R.drawable.orange1).diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true).into(imageView);
                     }
                     break;
                     case 2: {
-                        GlideApp.with(MiniYamb.this).load(R.drawable.orange2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        GlideApp.with(MaxiYamb.this).load(R.drawable.orange2).diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true).into(imageView);
                     }
                     break;
                     case 3: {
-                        GlideApp.with(MiniYamb.this).load(R.drawable.orange3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        GlideApp.with(MaxiYamb.this).load(R.drawable.orange3).diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true).into(imageView);
                     }
                     break;
                     case 4: {
-                        GlideApp.with(MiniYamb.this).load(R.drawable.orange4).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        GlideApp.with(MaxiYamb.this).load(R.drawable.orange4).diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true).into(imageView);
                     }
                     break;
                     case 5: {
-                        GlideApp.with(MiniYamb.this).load(R.drawable.orange5).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        GlideApp.with(MaxiYamb.this).load(R.drawable.orange5).diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true).into(imageView);
                     }
                     break;
                     case 6: {
-                        GlideApp.with(MiniYamb.this).load(R.drawable.orange6).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        GlideApp.with(MaxiYamb.this).load(R.drawable.orange6).diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true).into(imageView);
                     }
                     break;
@@ -409,27 +495,27 @@ public class MiniYamb extends AppCompatActivity  implements
                     arrayDicesState[i] = true;
                     switch (arrayDicesValue[i]) {
                         case 1:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.orange1).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 2:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.orange2).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 3:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.orange3).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 4:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange4).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.orange4).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 5:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange5).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.orange5).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 6:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange6).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.orange6).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                     }
@@ -439,27 +525,27 @@ public class MiniYamb extends AppCompatActivity  implements
                     switch (arrayDicesValue[i]) {
 
                         case 1:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.red1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.red1).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 2:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.red2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.red2).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 3:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.red3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.red3).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 4:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.red4).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.red4).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 5:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.red5).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.red5).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                         case 6:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.red6).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            GlideApp.with(MaxiYamb.this).load(R.drawable.red6).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(imageView);
                             break;
                     }
@@ -480,35 +566,35 @@ public class MiniYamb extends AppCompatActivity  implements
 //            if(numOfThrows == 0)
 //            {
 //                numOfThrows++;
-//                GlideApp.with(MiniYamb.this).load(R.drawable.play).into(imageView);
+//                GlideApp.with(MaxiYamb.this).load(R.drawable.play).into(imageView);
 //            }
             if(numOfThrows == 1)
             {
-                GlideApp.with(MiniYamb.this).load(R.drawable.play1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                GlideApp.with(MaxiYamb.this).load(R.drawable.play1).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).into(imageView);
                 firstTurn = true;
             }
             if(numOfThrows == 2)
             {
-                GlideApp.with(MiniYamb.this).load(R.drawable.play2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                GlideApp.with(MaxiYamb.this).load(R.drawable.play2).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).into(imageView);
             }
             if(numOfThrows == 3)
             {
-                GlideApp.with(MiniYamb.this).load(R.drawable.play3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                GlideApp.with(MaxiYamb.this).load(R.drawable.play3).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).into(imageView);
                 numOfThrows=0;
             }
 
 //            if (numOfThrows == 2) {
 //                numOfThrows = 0;
-//                GlideApp.with(MiniYamb.this).load(R.drawable.play1).into(imageView);
+//                GlideApp.with(MaxiYamb.this).load(R.drawable.play1).into(imageView);
 //            } else if (numOfThrows == 1) {
 //                numOfThrows++;
-//                GlideApp.with(MiniYamb.this).load(R.drawable.play3).into(imageView);
+//                GlideApp.with(MaxiYamb.this).load(R.drawable.play3).into(imageView);
 //            } else if (numOfThrows == 0) {
 //                numOfThrows++;
-//                GlideApp.with(MiniYamb.this).load(R.drawable.play2).into(imageView);
+//                GlideApp.with(MaxiYamb.this).load(R.drawable.play2).into(imageView);
 //            }
             if (arrayDicesState[0])
                 random(dice1, 0);
@@ -829,7 +915,7 @@ public class MiniYamb extends AppCompatActivity  implements
 
             case R.id.profile:
                 Intent i;
-                i = new Intent(MiniYamb.this, MiniYambOpponent.class);
+                i = new Intent(MaxiYamb.this, MaxiYambOpponent.class);
                 startActivity(i);
                 break;
         }

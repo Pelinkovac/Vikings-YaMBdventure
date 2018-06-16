@@ -45,7 +45,10 @@
         <activity android:name=".activities.LearnModeActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.MiniYamb" />
-        <activity android:name=".activities.MiniYambProba"></activity>
+        <activity android:name=".activities.MiniYambProba" />
+        <activity android:name=".activities.MiniYambOpponent" />
+        <activity android:name=".activities.MaxiYamb" />
+        <activity android:name=".activities.MaxiYambOpponent"></activity>
     </application>
 
 </manifest>

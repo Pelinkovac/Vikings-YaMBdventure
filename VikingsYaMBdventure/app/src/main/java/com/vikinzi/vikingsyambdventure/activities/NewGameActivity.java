@@ -18,7 +18,6 @@ public class NewGameActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
 
-        //listener-i
         ImageButton mini = (ImageButton) findViewById(R.id.miniyamb);
         mini.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,7 +30,8 @@ public class NewGameActivity extends AppCompatActivity
         maxi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent goToMaxi = new Intent(NewGameActivity.this, MaxiYamb.class);
+                startActivity(goToMaxi);
             }
         });
 

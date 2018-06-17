@@ -1,8 +1,8 @@
 package com.vikinzi.vikingsyambdventure.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +12,8 @@ import com.vikinzi.vikingsyambdventure.GlideApp;
 import com.vikinzi.vikingsyambdventure.R;
 
 import java.util.Random;
+
+//import org.w3c.dom.Text;
 
 public class MaxiYamb extends AppCompatActivity implements
         View.OnClickListener {
@@ -335,12 +337,16 @@ public class MaxiYamb extends AppCompatActivity implements
         arrayUp = new int[count];
         arrayFree = new int[count];
         arrayHand = new int[count];
+        arrayCenter = new int[count];
+        arraySides = new int[count];
 
         for (int i = 0; i < count; i++) {
             arrayHand[i] = -1;
             arrayFree[i] = -1;
             arrayUp[i] = -1;
             arrayDown[i] = -1;
+            arrayCenter[i] = -1;
+            arraySides[i] = -1;
         }
 
         arrayDicesValue = new int[6];
@@ -354,12 +360,12 @@ public class MaxiYamb extends AppCompatActivity implements
     }
 
     public void down(int i, TextView textView) {
-        if(i == 0 && arrayDown[0] == -1){
+        if(i == 0){
             arrayDown[0] = returnSumOfDices();
             textView.setText(String.valueOf(arrayDown[0]));
             played();
         }
-        else if(arrayDown[i-1] != -1 && arrayDown[i] == -1){
+        else if(arrayDown[i-1] != -1){
             arrayDown[i] = returnSumOfDices();
             textView.setText(String.valueOf(arrayDown[i]));
             played();
@@ -367,13 +373,13 @@ public class MaxiYamb extends AppCompatActivity implements
     }
 
     public void up(int i, TextView textView) {
-        if (i == 12 && arrayUp[12] == -1) {
+        if (i == 12) {
             arrayUp[12] = returnSumOfDices();
             textView.setText(String.valueOf(arrayUp[12]));
             textView.setClickable(false);
             played();
         }
-        else if (arrayUp[i + 1] != -1 && arrayUp[i] == -1) {
+        else if (arrayUp[i + 1] != -1) {
             arrayUp[i] = returnSumOfDices();
             textView.setText(String.valueOf(arrayUp[i]));
             played();
@@ -382,17 +388,82 @@ public class MaxiYamb extends AppCompatActivity implements
     }
 
     public void free(int i, TextView textView) {
-        if (arrayFree[i] == -1) {
             arrayFree[i] = returnSumOfDices();
             textView.setText(String.valueOf(arrayFree[i]));
             played();
-        }
     }
 
     public void hand(int i, TextView textView) {
         if ((arrayHand[i] == -1) && (numOfThrows == 1)) {
             arrayHand[i] = returnSumOfDices();
             textView.setText(String.valueOf(arrayHand[i]));
+            played();
+        }
+    }
+
+    //nagore 6,5,4,3,2,1,0
+    //nadole 7,8,9,10,11,12
+    public void centerUp(int i, TextView textView)
+    {
+        if(i == 6)
+        {
+            arrayCenter[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arrayCenter[i]));
+            played();
+        }
+        else if(arrayCenter[i + 1] != -1)
+        {
+            arrayCenter[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arrayCenter[i]));
+            played();
+        }
+    }
+    public void centerDown(int i, TextView textView)
+    {
+        if(i==7)
+        {
+            arrayCenter[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arrayCenter[i]));
+            played();
+        }
+        else if(arrayCenter[i - 1] != -1)
+        {
+            arrayCenter[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arrayCenter[i]));
+            played();
+        }
+    }
+
+    //nadole 0,1,2,3,4,5,6
+    //nagore 12,11,10,9,8,7
+    public void sidesDown(int i, TextView textView)
+    {
+        if(i==0)
+        {
+            arraySides[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arraySides[i]));
+            played();
+        }
+        else if(arraySides[i - 1] != -1)
+        {
+            arraySides[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arraySides[i]));
+            played();
+        }
+    }
+
+    public void sidesUp(int i, TextView textView)
+    {
+        if(i == 12)
+        {
+            arraySides[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arraySides[i]));
+            played();
+        }
+        else if(arraySides[i + 1] != -1)
+        {
+            arraySides[i] = returnSumOfDices();
+            textView.setText(String.valueOf(arraySides[i]));
             played();
         }
     }
@@ -882,6 +953,138 @@ public class MaxiYamb extends AppCompatActivity implements
             case R.id.hand_yamb:
                 if(arrayHand[12] == -1)
                     hand( 12, hand_yamb);
+                break;
+
+            // 5. column - center (from center to sides)
+            case R.id.center_1:
+                if(arrayCenter[0] == -1)
+                    centerUp( 0, center_1);
+                break;
+
+            case R.id.center_2:
+                if(arrayCenter[1] == -1)
+                    centerUp( 1, center_2);
+                break;
+
+            case R.id.center_3:
+                if(arrayCenter[2] == -1)
+                    centerUp( 2, center_3);
+                break;
+
+            case R.id.center_4:
+                if(arrayCenter[3] == -1)
+                    centerUp( 3, center_4);
+                break;
+
+            case R.id.center_5:
+                if(arrayCenter[4] == -1)
+                    centerUp( 4, center_5);
+                break;
+
+            case R.id.center_6:
+                if(arrayCenter[5] == -1)
+                    centerUp( 5, center_6);
+                break;
+
+            case R.id.center_max:
+                if(arrayCenter[6] == -1)
+                    centerUp( 6, center_max);
+                break;
+
+            case R.id.center_min:
+                if(arrayCenter[7] == -1)
+                    centerDown( 7, center_min);
+                break;
+
+            case R.id.center_straight:
+                if(arrayCenter[8] == -1)
+                    centerDown( 8, center_straight);
+                break;
+
+            case R.id.center_three:
+                if(arrayCenter[9] == -1)
+                    centerDown( 9, center_three);
+                break;
+
+            case R.id.center_full:
+                if(arrayCenter[10] == -1)
+                    centerDown( 10, center_full);
+                break;
+
+            case R.id.center_poker:
+                if(arrayCenter[11] == -1)
+                    centerDown( 11, center_poker);
+                break;
+
+            case R.id.center_yamb:
+                if(arrayCenter[12] == -1)
+                    centerDown( 12, center_yamb);
+                break;
+
+            // 6. column - side (from sides to center)
+            case R.id.sides_1:
+                if(arraySides[0] == -1)
+                    sidesDown( 0, sides_1);
+                break;
+
+            case R.id.sides_2:
+                if(arraySides[1] == -1)
+                    sidesDown( 1, sides_2);
+                break;
+
+            case R.id.sides_3:
+                if(arraySides[2] == -1)
+                    sidesDown( 2, sides_3);
+                break;
+
+            case R.id.sides_4:
+                if(arraySides[3] == -1)
+                    sidesDown( 3, sides_4);
+                break;
+
+            case R.id.sides_5:
+                if(arraySides[4] == -1)
+                    sidesDown( 4, sides_5);
+                break;
+
+            case R.id.sides_6:
+                if(arraySides[5] == -1)
+                    sidesDown( 5, sides_6);
+                break;
+
+            case R.id.sides_max:
+                if(arraySides[6] == -1)
+                    sidesDown( 6, sides_max);
+                break;
+
+            case R.id.sides_min:
+                if(arraySides[7] == -1)
+                    sidesUp( 7, sides_min);
+                break;
+
+            case R.id.sides_straight:
+                if(arraySides[8] == -1)
+                    sidesUp( 8, sides_straight);
+                break;
+
+            case R.id.sides_three:
+                if(arraySides[9] == -1)
+                    sidesUp( 9, sides_three);
+                break;
+
+            case R.id.sides_full:
+                if(arraySides[10] == -1)
+                    sidesUp( 10, sides_full);
+                break;
+
+            case R.id.sides_poker:
+                if(arraySides[11] == -1)
+                    sidesUp( 11, sides_poker);
+                break;
+
+            case R.id.sides_yamb:
+                if(arraySides[12] == -1)
+                    sidesUp( 12, sides_yamb);
                 break;
 
             // Dices

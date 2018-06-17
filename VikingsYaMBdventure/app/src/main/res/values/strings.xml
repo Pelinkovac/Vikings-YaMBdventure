@@ -48,17 +48,63 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
     <!--Strings related to in game texts-->
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
+    <string name="game_rules">
 
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "Game rules\n\n"
+
+        "Vikings’ YaMBdventure is multiplayer dice game, involving lots of luck, but also a decent amount of strategy and tactics. \n"
+        "You have a possibility of choosing mini or maxi yamb. They differ in number of columns – more columns more difficult game. \n"
+
+        "\n Rolling dice \n "
+        "Player takes turn rolling six dice. After each roll, he chooses which dice (if any) to keep, "
+        "and which to re-roll. The player may re-roll some or all of the dice up to three times on a turn. "
+        "After ends his turn, player scores his best matching result by combining only five dice. \n"
+
+        "\n Column down \n "
+        "In the first column, the order of scoring is from top to bottom. \n"
+
+        "\n Column up \n "
+        "The second column is opposite to the first, the order of scoring is from bottom to top. \n"
+
+        "\n Free column \n "
+        "In the third column, you can score in any order. \n"
+
+        "\n Column "H" \n "
+        "In the fourth column you can score only after your first roll of dices. \n"
+
+         "\n First sum row \n "
+        "In this row you score the sum of the first six rows. If the sum is greater than 60, you will be awarded with 30 bonus points. \n"
+
+         "\n Max row \n "
+        "The aim of this row is to score as much as possible points. \n"
+
+         "\n Min row \n "
+        "The aim of this row is to score as less as possible points. \n"
+
+        "\n Min-max sum row \n "
+        "The sum in this row is calculated by the formula (Max - Min) x (number of ones in first row)."
+        "From examples above it is (27 - 8) x 4 = 19 x 4 = 76. \n"
+
+        "\n "S" - Straight row \n "
+        "Combinations 1, 2, 3, 4, 5 or 2, 3, 4, 5, 6. If you get one of these combinations by rolling all dice at once – the score is 66. "
+        "If you keep some of the dice, and some of them roll again – the score is 56. And if you roll some of the dice three times, the score is 46. \n"
+
+        "\n "T" - Three of the kind \n "
+        "3 equal dice. For each Poker you will be awarded with 20 bonus points. \n"
+
+        "\n "F" - Full house row \n "
+        "Combinations of 3 equal dice and other 2 equal dice. For each Full House you will be awarded with 30 bonus points. \n"
+
+         "\n "P" - Poker row \n "
+        "4 equal dice. For each Poker you will be awarded with 40 bonus points. \n"
+
+        "\n "Y" - Yamb row \n "
+        "This is the most valuable field in the game. You need to collect 5 equal dice. For each Yamb you will be awarded with 50 bonus points.\n"
+
+        \n Third sum column \n "
+        "The sum of the previous 4 rows (S + F + P + Y). \n"
+    </string>
+    <string name="large_text">
         "interact, and exist in space and in relation to each other. Realistic lighting shows "
         "seams, divides space, and indicates moving parts.\n\n"
 

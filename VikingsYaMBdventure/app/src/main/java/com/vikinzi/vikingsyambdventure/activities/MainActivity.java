@@ -118,24 +118,24 @@ public class MainActivity extends AppCompatActivity implements
         });*/
 
 
-        GlideApp.with(this)
-                .load(R.drawable.avatar_muski_braon)
-                .centerCrop()
-                .transition(DrawableTransitionOptions.withCrossFade()) //Optional
-                .skipMemoryCache(true)  //No memory cache
-                .diskCacheStrategy(DiskCacheStrategy.NONE)   //No disk cache
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .into(prof);
+//        GlideApp.with(this)
+//                .load(R.drawable.avatar_muski_braon)
+//                .centerCrop()
+//                .transition(DrawableTransitionOptions.withCrossFade()) //Optional
+//                .skipMemoryCache(true)  //No memory cache
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)   //No disk cache
+//                .listener(new RequestListener<Drawable>() {
+//                    @Override
+//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                        return false;
+//                    }
+//                })
+//                .into(prof);
     }
 
 

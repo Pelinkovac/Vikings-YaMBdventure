@@ -76,7 +76,7 @@
 
             <ImageView
                 android:id="@+id/img_sum1"
-                android:background="@drawable/polje"
+                android:background="@drawable/img_sum"
                 android:layout_height="@dimen/_22sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/img_6"/>
@@ -97,7 +97,7 @@
 
             <ImageView
                 android:id="@+id/img_sum2"
-                android:background="@drawable/polje"
+                android:background="@drawable/img_sum"
                 android:layout_height="@dimen/_22sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/img_min"/>
@@ -111,7 +111,7 @@
 
             <ImageView
                 android:id="@+id/img_three"
-                android:background="@drawable/img_three1"
+                android:background="@drawable/img_three"
                 android:layout_height="@dimen/_22sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/img_straight"/>
@@ -139,7 +139,7 @@
 
             <ImageView
                 android:id="@+id/img_sum3"
-                android:background="@drawable/polje"
+                android:background="@drawable/img_sum"
                 android:layout_height="@dimen/_22sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/img_yamb"/>
@@ -1123,7 +1123,7 @@
 
             <ImageView
                 android:id="@+id/yamb_help1"
-                android:background="@drawable/polje"
+                android:background="@drawable/yamb_help1"
                 android:layout_height="@dimen/_133sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/img_help"/>
@@ -1139,7 +1139,7 @@
 
             <ImageView
                 android:id="@+id/yamb_help2"
-                android:background="@drawable/polje"
+                android:background="@drawable/yamb_help2"
                 android:layout_height="@dimen/_44sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/yamb_sum1"/>
@@ -1155,7 +1155,7 @@
 
             <ImageView
                 android:id="@+id/yamb_help3"
-                android:background="@drawable/polje"
+                android:background="@drawable/yamb_help3"
                 android:layout_height="@dimen/_110sdp"
                 android:layout_width="@dimen/_37sdp"
                 android:text="1999"
@@ -1181,7 +1181,7 @@
         android:id="@+id/yamb_sumtotal"
         android:background="@drawable/sum_style"
         android:layout_height="@dimen/_22sdp"
-        android:layout_width="@dimen/_80sdp"
+        android:layout_width="@dimen/_74sdp"
         android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintRight_toRightOf="@id/yamb_paper"
@@ -1190,11 +1190,20 @@
         />
 
     <ImageView
+        android:id="@+id/img_sum4"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:src="@drawable/img_sum1"
+        app:layout_constraintLeft_toLeftOf="@+id/yamb_sumtotal"
+        app:layout_constraintBottom_toBottomOf="@+id/yamb_sumtotal"
+        app:layout_constraintTop_toTopOf="@+id/yamb_sumtotal"/>
+
+    <ImageView
         android:id="@+id/profile"
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_60sdp"
         android:src="@drawable/avatar"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/yamb_sumtotal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/yamb_sumtotal"/>
 

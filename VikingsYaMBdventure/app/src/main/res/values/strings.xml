@@ -48,62 +48,100 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
     <!--Strings related to in game texts-->
+
+    <string name="miniyamb"> "Mini  Yamb"</string>
+    <string name="maxiyamb"> "Maxi  Yamb"</string>
+
+    <string name="radio_male"> "Male"</string>
+    <string name="radio_female"> "Female"</string>
+
+    <string name="sex"> <b>"Sex:" </b> </string>
+    <string name="coins"> <b>"Coins:" </b> </string>
+    <string name="total_games"> <b>"Total games:" </b> </string>
+    <string name="wins"> <b>"Wins:" </b> </string>
+    <string name="rang"> <b>"Rang:" </b> </string>
+
+
     <string name="game_rules">
+        <b>  "Game Rules" </b>
+    </string>
 
-        "Game rules\n\n"
+    <string name="game_rules1">
 
-        "Vikings’ YaMBdventure is multiplayer dice game, involving lots of luck, but also a decent amount of strategy and tactics. \n"
+        <b><i> "Vikings’ YaMBdventure</i></b> is multiplayer dice game, involving lots of luck, but also a decent amount of strategy and tactics. \n"
         "You have a possibility of choosing mini or maxi yamb. They differ in number of columns – more columns more difficult game. \n"
 
-        "\n Rolling dice \n "
+        <b>"\n Rolling dice \n "</b>
         "Player takes turn rolling six dice. After each roll, he chooses which dice (if any) to keep, "
         "and which to re-roll. The player may re-roll some or all of the dice up to three times on a turn. "
         "After ends his turn, player scores his best matching result by combining only five dice. \n"
 
-        "\n Column down \n "
+        <b>"\n Column down \n "</b>
         "In the first column, the order of scoring is from top to bottom. \n"
 
-        "\n Column up \n "
+         <b>"\n Column up \n " </b>
         "The second column is opposite to the first, the order of scoring is from bottom to top. \n"
 
-        "\n Free column \n "
+        <b>"\n Free column \n "</b>
         "In the third column, you can score in any order. \n"
 
-        "\n Column "H" \n "
+        <b>"\n Column "H" \n "</b>
         "In the fourth column you can score only after your first roll of dices. \n"
 
-         "\n First sum row \n "
+         <b>"\n Column from center \n " </b>
+        "In the fifth column you can score from field max to the top and from the field min to the bottom of column. \n"
+
+        <b>"\n Column from beging and end \n " </b>
+        "In the sixth column you can score from top to the field max and from bottom to field min. \n"
+
+        <b>"\n Rows "1", "2", "3", "4", "5" and "6"\n "</b>
+        "First six rows are simple combinations - 1, 2, 3, etc. Score is the sum of all ones, twos, threes, etc., depends what you are collecting. \n"
+
+    </string>
+    <string name="game_rules2">
+        " = 4 points \n"
+        <b>"\n First sum row \n "</b>
         "In this row you score the sum of the first six rows. If the sum is greater than 60, you will be awarded with 30 bonus points. \n"
 
-         "\n Max row \n "
+        <b>"\n Max row \n "</b>
         "The aim of this row is to score as much as possible points. \n"
-
-         "\n Min row \n "
+    </string>
+    <string name="game_rules3">
+        " = 27 points \n"
+        <b>"\n Min row \n "</b>
         "The aim of this row is to score as less as possible points. \n"
-
-        "\n Min-max sum row \n "
+    </string>
+    <string name="game_rules4">
+        " = 8 points \n"
+        <b>"\n Min-max sum row \n "</b>
         "The sum in this row is calculated by the formula (Max - Min) x (number of ones in first row)."
         "From examples above it is (27 - 8) x 4 = 19 x 4 = 76. \n"
 
-        "\n "S" - Straight row \n "
+        <b>"\n "S" - Straight row \n "</b>
         "Combinations 1, 2, 3, 4, 5 or 2, 3, 4, 5, 6. If you get one of these combinations by rolling all dice at once – the score is 66. "
         "If you keep some of the dice, and some of them roll again – the score is 56. And if you roll some of the dice three times, the score is 46. \n"
-
-        "\n "T" - Three of the kind \n "
+    </string>
+    <string name="game_rules5">
+        <b> "\n "T" - Three of the kind \n "</b>
         "3 equal dice. For each Poker you will be awarded with 20 bonus points. \n"
-
-        "\n "F" - Full house row \n "
+    </string>
+    <string name="game_rules6">
+        <b>"\n "F" - Full house row \n "</b>
         "Combinations of 3 equal dice and other 2 equal dice. For each Full House you will be awarded with 30 bonus points. \n"
-
-         "\n "P" - Poker row \n "
+    </string>
+    <string name="game_rules7">
+        <b>"\n "P" - Poker row \n "</b>
         "4 equal dice. For each Poker you will be awarded with 40 bonus points. \n"
-
-        "\n "Y" - Yamb row \n "
+    </string>
+    <string name="game_rules8">
+        <b>"\n "Y" - Yamb row \n "</b>
         "This is the most valuable field in the game. You need to collect 5 equal dice. For each Yamb you will be awarded with 50 bonus points.\n"
-
-        \n Third sum column \n "
+    </string>
+    <string name="game_rules9">
+        <b>"\n Third sum column \n "</b>
         "The sum of the previous 4 rows (S + F + P + Y). \n"
     </string>
+
     <string name="large_text">
         "interact, and exist in space and in relation to each other. Realistic lighting shows "
         "seams, divides space, and indicates moving parts.\n\n"

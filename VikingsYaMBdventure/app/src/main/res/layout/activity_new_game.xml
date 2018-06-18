@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bcg"
+    android:background="@drawable/bcg_newgame"
     tools:context="com.vikinzi.vikingsyambdventure.activities.NewGameActivity">
 
     <android.support.constraint.Guideline
@@ -19,35 +19,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.53" />
 
-    <ImageButton
-        android:id="@+id/miniyamb"
-        android:layout_width="@dimen/_150sdp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:background="@drawable/btn_miniyamb"
-        app:layout_constraintLeft_toLeftOf="@id/vguideline"
-        app:layout_constraintTop_toTopOf="@id/hguideline1" />
+    <android.support.constraint.Guideline
+        android:id="@+id/hguideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.46" />
 
-    <ImageButton
-        android:id="@+id/maxiyamb"
+
+    <ImageView
+        android:id="@+id/viking_mini"
         android:layout_width="@dimen/_150sdp"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/_450sdp"
         android:layout_marginTop="@dimen/_15sdp"
-        android:background="@drawable/btn_maxiyamb"
-        app:layout_constraintLeft_toLeftOf="@id/vguideline"
-        app:layout_constraintTop_toBottomOf="@id/miniyamb"/>
+        android:contentDescription="@string/action_settings"
+        android:src="@drawable/viking_mini"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/viking_maxi"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_450sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:contentDescription="@string/action_settings"
+        android:src="@drawable/viking_maxi"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
     <TextView
-        android:id="@+id/protoProba"
-        android:layout_width="wrap_content"
-        android:layout_height="46dp"
-        android:layout_marginBottom="96dp"
-        android:layout_marginLeft="64dp"
-        android:layout_marginStart="64dp"
-        android:text="@string/protoproba"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/vguideline" />
+        android:id="@+id/miniyamb"
+        android:layout_width="@dimen/_140sdp"
+        android:layout_height="@dimen/_140sdp"
+        android:text="@string/miniyamb"
+        android:textSize="@dimen/_35sdp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/hguideline1"
+        app:layout_constraintLeft_toLeftOf="@id/viking_mini"
+        app:layout_constraintRight_toRightOf="@id/viking_mini"/>
+
+    <TextView
+        android:id="@+id/maxiyamb"
+        android:layout_width="@dimen/_140sdp"
+        android:layout_height="@dimen/_140sdp"
+        android:text="@string/maxiyamb"
+        android:textSize="@dimen/_35sdp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/hguideline2"
+        app:layout_constraintLeft_toLeftOf="@id/viking_maxi"
+        app:layout_constraintRight_toRightOf="@id/viking_maxi"/>
+
+
 
 </android.support.constraint.ConstraintLayout>

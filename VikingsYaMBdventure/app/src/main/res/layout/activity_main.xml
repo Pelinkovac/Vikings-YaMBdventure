@@ -57,6 +57,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/hguideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.03" />
+
     <ImageButton
         android:id="@+id/learnmode"
         android:layout_width="@dimen/_130sdp"
@@ -116,6 +123,6 @@
         android:background="@drawable/avatar"
         android:contentDescription="@string/action_settings"
         app:layout_constraintLeft_toRightOf="@id/vguideline1"
-        app:layout_constraintTop_toTopOf="@id/vguideline" />
+        app:layout_constraintTop_toTopOf="@id/hguideline4" />
 
 </android.support.constraint.ConstraintLayout>

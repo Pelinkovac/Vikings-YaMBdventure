@@ -9,6 +9,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.content.Intent;
 import android.widget.ImageButton;
@@ -33,20 +35,18 @@ public class ProfileActivity extends AppCompatActivity {
         popupDialog = new Dialog(this);
 
         final FirebaseAuth auth = FirebaseAuth.getInstance();
-        final TextView txtime = (TextView) findViewById(R.id.editTextIme);
-        final TextView txtprezime = (TextView) findViewById(R.id.editTextPrezime);
-        final TextView txtnick = (TextView) findViewById(R.id.editTextNickname);
-        Button savedata = (Button) findViewById(R.id.save);
+        final TextView nick = (TextView) findViewById(R.id.txtNick);
+        final RadioGroup sex = (RadioGroup) findViewById(R.id.radio_sex);
+        ImageButton btn_save = (ImageButton) findViewById(R.id.save);
 
-        savedata.setOnClickListener(new View.OnClickListener() {
+        btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference parRef = database.getReference("users");
                 DatabaseReference Ref = parRef.child(auth.getUid());
-                User user = new User(txtprezime.getText().toString().trim(), txtime.getText().toString().trim(),
-                        txtnick.getText().toString().trim());
-                Ref.setValue(user);
+        //        User user = new User( nick.getText().toString().trim());
+           //     Ref.setValue(user);
             }
         });
     }

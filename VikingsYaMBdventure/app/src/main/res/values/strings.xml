@@ -28,13 +28,13 @@
     <string name="send_password_reset_email">Send Password reset email</string>
     <string name="remove_user">Remove user</string>
     <string name="new_pass">New Password</string>
-    <string name="title_activity_profile">Firebase</string>
+    <string name="title_activity_profile">Vikings\' YaMBdventure</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
-    <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
-    <string name="btn_link_to_login">Already registered. Login Me!</string>
+    <string name="btn_link_to_register">Not a member? Get registered in Vikings\' YaMBdventure now!</string>
+    <string name="btn_link_to_login">Already registered. Log me in!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_reset_password">Reset Password</string>
@@ -48,9 +48,8 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
     <!--Strings related to in game texts-->
-
-    <string name="miniyamb"> "Mini  Yamb"</string>
-    <string name="maxiyamb"> "Maxi  Yamb"</string>
+    <string name="maxiyamb">"Maxi Yamb"</string>
+    <string name="miniyamb">"Mini Yamb"</string>
 
     <string name="radio_male"> "Male"</string>
     <string name="radio_female"> "Female"</string>
@@ -60,7 +59,14 @@
     <string name="total_games"> <b>"Total games:" </b> </string>
     <string name="wins"> <b>"Wins:" </b> </string>
     <string name="rang"> <b>"Rang:" </b> </string>
+    <string name="points">"points:"</string>
+    <string name="exitgame">"Are you sure you want to exit the game?"</string>
 
+    <string name="txt_eraser">"If score is entered in the field by mistake, it undoes the action."</string>
+    <string name="txt_coins">"Coins are given as a reward after victory and, also, collected during the game. It can be spent on helps."</string>
+    <string name="txt_help1">"Five ones are inserted in the field '1' in Down or Hand column. (100 coins)"</string>
+    <string name="txt_help2">"Value 30 is inserted in the field 'max' or value 5 in min field 'min' in Hand column(150 coins)"</string>
+    <string name="txt_help3">"Yamb with sixths are inserted in Up or Hand column. (200 coins)"</string>
 
     <string name="game_rules">
         <b>  "Game Rules" </b>
@@ -126,101 +132,27 @@
         "3 equal dice. For each Poker you will be awarded with 20 bonus points. \n"
     </string>
     <string name="game_rules6">
+        " = 15 + 20 = 35 points \n"
         <b>"\n "F" - Full house row \n "</b>
         "Combinations of 3 equal dice and other 2 equal dice. For each Full House you will be awarded with 30 bonus points. \n"
     </string>
     <string name="game_rules7">
+        " = 28 + 30 = 58 points \n"
         <b>"\n "P" - Poker row \n "</b>
         "4 equal dice. For each Poker you will be awarded with 40 bonus points. \n"
     </string>
     <string name="game_rules8">
+        " = 16 + 40 = 56 points \n"
         <b>"\n "Y" - Yamb row \n "</b>
         "This is the most valuable field in the game. You need to collect 5 equal dice. For each Yamb you will be awarded with 50 bonus points.\n"
     </string>
     <string name="game_rules9">
+        " = 30 + 50 = 80 points \n"
         <b>"\n Third sum column \n "</b>
         "The sum of the previous 4 rows (S + F + P + Y). \n"
     </string>
 
-    <string name="large_text">
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-
-        "Bold, graphic, intentional.\n\n"
-
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
-
-        "Motion provides meaning.\n\n"
-
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
-        "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
-        "breaking the continuity of experience even as they transform and reorganize.\n"
-        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
-
-        "3D world.\n\n"
-
-        "The material environment is a 3D space, which means all objects have x, y, and z "
-        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
-        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
-        "position along the z-axis and has a standard 1dp thickness.\n"
-        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
-        "emulated by manipulating the y-axis.\n\n"
-
-        "Light and shadow.\n\n"
-
-        "Within the material environment, virtual lights illuminate the scene. Key lights create "
-        "directional shadows, while ambient light creates soft shadows from all angles.\n"
-        "Shadows in the material environment are cast by these two light sources. In Android "
-        "development, shadows occur when light sources are blocked by sheets of material at "
-        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
-        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
-
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
-        "Avoiding elevation interference.\n\n"
-
-        "Components with responsive elevations may encounter other components as they move between "
-        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
-        "through other material, components avoid interfering with one another any number of ways, "
-        "whether on a per component basis or using the entire app layout.\n"
-        "On a component level, components can move or be removed before they cause interference. "
-        "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
-        "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
-    </string>
+    <string name="congrats">"Congratulations! Points that you have earn:"</string>
     <string name="protoproba">protoProba</string>
 
 </resources>

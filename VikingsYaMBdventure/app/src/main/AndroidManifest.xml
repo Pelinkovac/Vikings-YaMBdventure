@@ -10,8 +10,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/appicon"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -39,15 +40,18 @@
                 <action android:name="android.intent.action.PROPERTIES" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RangListActivity" />
         <activity android:name=".activities.GameRulesActivity" />
-        <activity android:name=".activities.LearnModeActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.MiniYamb" />
-        <activity android:name=".activities.MiniYambProba" />
         <activity android:name=".activities.MiniYambOpponent" />
         <activity android:name=".activities.MaxiYamb" />
-        <activity android:name=".activities.MaxiYambOpponent"></activity>
+        <activity android:name=".activities.MaxiYambOpponent" />
+        <activity android:name=".activities.AccountActivity" />
+        <activity android:name=".activities.FindMaxiActivity" />
+        <activity android:name=".activities.FindMiniActivity" />
+        <activity android:name=".activities.NewSinglePlayerActivity" />
+        <activity android:name=".activities.MiniSingle" />
+        <activity android:name=".activities.MaxiSingle"/>
     </application>
 
 </manifest>

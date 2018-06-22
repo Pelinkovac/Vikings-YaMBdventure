@@ -100,11 +100,12 @@ public class SignupActivity extends AppCompatActivity {
                                     DatabaseReference parRef = database.getReference("users");
                                     DatabaseReference Ref = parRef.child(auth.getUid());
 
-                                    User user = new User("nul", "nul", "nul");
+                                    User user = new User();
                                     Ref.setValue(user);
 
-
-                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    Intent goToProfile = new Intent(SignupActivity.this, ProfileActivity.class);
+                                    goToProfile.putExtra("Background", 1);
+                                    startActivity(goToProfile);
                                     finish();
                                 }
                             }

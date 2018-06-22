@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pozadina"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -47,42 +48,42 @@
         <!--app:layout_constraintGuide_percent="0.03" />-->
 
 
-    <ImageButton
-        android:id="@+id/profile"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:background="@drawable/avatar"
-        android:contentDescription="@string/action_settings"
-        android:onClick="ShowPopup"
-        app:layout_constraintLeft_toRightOf="@id/vguideline1"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        <ImageButton
+            android:id="@+id/profile"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:background="#00000000"
+            android:contentDescription="@string/action_settings"
+            android:onClick="ShowPopup"
+            app:layout_constraintLeft_toRightOf="@id/vguideline1"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <EditText
             android:id="@+id/txtNick"
             android:layout_width="@dimen/_150sdp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_20sdp"
-            android:textColor="@color/black"
             android:gravity="center"
             android:hint="Viking nick"
             android:inputType="textPersonName"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_20sdp"
             app:layout_constraintLeft_toRightOf="@+id/profile"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/sex"
+        <EditText
+            android:id="@+id/txtAge"
             android:layout_width="@dimen/_150sdp"
             android:layout_height="wrap_content"
-            android:text="@string/sex"
-            android:textSize="@dimen/_20sdp"
-            android:textColor="@color/black"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/txtNick"
+            android:hint="Age"
+            android:inputType="number"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_20sdp"
             app:layout_constraintLeft_toRightOf="@+id/profile"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtNick" />
 
         <RadioGroup
             android:id="@+id/radio_sex"
@@ -90,7 +91,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/sex"
+            app:layout_constraintTop_toBottomOf="@+id/txtAge"
             app:layout_constraintLeft_toRightOf="@+id/profile"
             app:layout_constraintRight_toRightOf="parent">
 
@@ -110,16 +111,16 @@
                 android:text="@string/radio_female" />
 
         </RadioGroup>
+
         <ImageButton
             android:id="@+id/save"
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_marginTop="@dimen/_20sdp"
-            android:background="@drawable/btn_properties"
-            app:layout_constraintTop_toBottomOf="@id/radio_sex"
+            android:background="@drawable/btn_save"
             app:layout_constraintLeft_toRightOf="@+id/profile"
             app:layout_constraintRight_toRightOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/radio_sex" />
     </android.support.constraint.ConstraintLayout>
 
     <!--Constraint for game info - coins, rang ect. -->
@@ -135,7 +136,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/coins"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:textColor="@color/black"
             android:gravity="left"
             android:layout_marginTop="@dimen/_20sdp"
@@ -147,10 +148,9 @@
             android:id="@+id/coins_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1000"
             android:layout_marginTop="@dimen/_20sdp"
             android:textColor="@color/black"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:gravity="right"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toRightOf="@id/coins"
@@ -161,7 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/total_games"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:textColor="@color/black"
             android:gravity="left"
             android:layout_marginTop="@dimen/_20sdp"
@@ -174,8 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="10"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:gravity="right"
             android:layout_marginTop="@dimen/_20sdp"
             app:layout_constraintTop_toBottomOf="@id/coins_num"
@@ -187,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/wins"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:textColor="@color/black"
             android:gravity="left"
             android:layout_marginTop="@dimen/_20sdp"
@@ -199,9 +198,8 @@
             android:id="@+id/wins_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="8"
             android:textColor="@color/black"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:gravity="right"
             android:layout_marginTop="@dimen/_20sdp"
             app:layout_constraintTop_toBottomOf="@id/total_games_num"
@@ -213,7 +211,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rang"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:gravity="left"
             android:textColor="@color/black"
             android:layout_marginTop="@dimen/_20sdp"
@@ -225,9 +223,8 @@
             android:id="@+id/rang_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="15."
             android:textColor="@color/black"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_30sdp"
             android:gravity="right"
             android:layout_marginTop="@dimen/_20sdp"
             app:layout_constraintTop_toBottomOf="@id/wins_num"

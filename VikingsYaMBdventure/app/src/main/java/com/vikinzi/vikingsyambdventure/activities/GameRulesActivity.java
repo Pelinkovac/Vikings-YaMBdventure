@@ -10,7 +10,8 @@ import com.vikinzi.vikingsyambdventure.R;
 
 public class GameRulesActivity extends AppCompatActivity {
 
-    TextView gamerules, gamerules1, gamerules2, gamerules3, gamerules4,gamerules5, gamerules6, gamerules7, gamerules8;
+    TextView gamerules, gamerules1, gamerules2, gamerules3, gamerules4,gamerules5, gamerules6, gamerules7, gamerules8, gamerules9;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,8 @@ public class GameRulesActivity extends AppCompatActivity {
         gamerules6 = (TextView)findViewById(R.id.gamerules6);
         gamerules7 = (TextView)findViewById(R.id.gamerules7);
         gamerules8 = (TextView)findViewById(R.id.gamerules8);
+        gamerules9 = (TextView)findViewById(R.id.gamerules9);
+
 
         Typeface vikingsFont= Typeface.createFromAsset(getAssets(), "fonts/enchanted_land.ttf");
         gamerules.setTypeface(vikingsFont);
@@ -36,6 +39,7 @@ public class GameRulesActivity extends AppCompatActivity {
         gamerules6.setTypeface(vikingsFont);
         gamerules7.setTypeface(vikingsFont);
         gamerules8.setTypeface(vikingsFont);
+        gamerules9.setTypeface(vikingsFont);
 
     }
 }

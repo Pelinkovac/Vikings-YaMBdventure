@@ -1122,8 +1122,8 @@
                 android:layout_width="@dimen/_37sdp" />
 
             <ImageView
-                android:id="@+id/yamb_help1"
-                android:background="@drawable/yamb_help1"
+                android:id="@+id/wood_help1"
+                android:background="@drawable/wood_help1"
                 android:layout_height="@dimen/_133sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/img_help"/>
@@ -1135,11 +1135,11 @@
                 android:layout_width="@dimen/_37sdp"
                 android:gravity="center"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/yamb_help1"/>
+                app:layout_constraintTop_toBottomOf="@id/wood_help1"/>
 
             <ImageView
-                android:id="@+id/yamb_help2"
-                android:background="@drawable/yamb_help2"
+                android:id="@+id/wood_help2"
+                android:background="@drawable/wood_help2"
                 android:layout_height="@dimen/_44sdp"
                 android:layout_width="@dimen/_37sdp"
                 app:layout_constraintTop_toBottomOf="@id/yamb_sum1"/>
@@ -1151,14 +1151,13 @@
                 android:layout_width="@dimen/_37sdp"
                 android:gravity="center"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/yamb_help2"/>
+                app:layout_constraintTop_toBottomOf="@id/wood_help2"/>
 
             <ImageView
-                android:id="@+id/yamb_help3"
-                android:background="@drawable/yamb_help3"
+                android:id="@+id/wood_help3"
+                android:background="@drawable/wood_help3"
                 android:layout_height="@dimen/_110sdp"
                 android:layout_width="@dimen/_37sdp"
-                android:text="1999"
                 app:layout_constraintTop_toBottomOf="@id/yamb_sum2"/>
 
             <TextView
@@ -1168,7 +1167,7 @@
                 android:layout_width="@dimen/_37sdp"
                 android:gravity="center"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/yamb_help3"/>
+                app:layout_constraintTop_toBottomOf="@id/wood_help3"/>
 
 
         </android.support.constraint.ConstraintLayout>
@@ -1202,7 +1201,6 @@
         android:id="@+id/profile"
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_60sdp"
-        android:src="@drawable/avatar"
         app:layout_constraintLeft_toLeftOf="@id/yamb_sumtotal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/yamb_sumtotal"/>

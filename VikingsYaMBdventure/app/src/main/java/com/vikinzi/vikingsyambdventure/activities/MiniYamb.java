@@ -1,27 +1,41 @@
 package com.vikinzi.vikingsyambdventure.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.os.CountDownTimer;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.vikinzi.vikingsyambdventure.GlideApp;
 import com.vikinzi.vikingsyambdventure.R;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
+import static android.graphics.Color.RED;
 
 
 public class MiniYamb extends AppCompatActivity  implements
-        View.OnClickListener, TextWatcher {
+        View.OnClickListener {
     //TextView obj for 1. column - down
     TextView down_1;
     TextView down_2;
@@ -99,6 +113,7 @@ public class MiniYamb extends AppCompatActivity  implements
     TextView yamb_sum2;
     TextView yamb_sum3;
     TextView yamb_sumtotal;
+    TextView txt_coins;
 
     ImageView dice1;
     ImageView dice2;
@@ -109,30 +124,77 @@ public class MiniYamb extends AppCompatActivity  implements
     ImageView play;
     ImageView profile;
 
- //   private View p;
- //   private MiniYamb (View view){
- //       this.p = view;
- //   }
+    ImageView eraser, help1, help2, help3;
+
+    TextView time;
+
+
+    MediaPlayer mp_dice, mp_erase, mp_select, mp_write, mp_coins;
+    boolean soundON = true;
+    SharedPreferences sharedPreferences;
+
+
 
 //    Down Down;
 
     //Arrays for TextViews values of all columns
-    int count = 13;
-    int[] arrayDown, arrayUp, arrayFree, arrayHand, arrayDicesValue;
-    boolean[] arrayDicesState;
+    int[] arrayDicesValue,  arrayDicesValue1;
+    Integer[] arrayCeo;
+    boolean[] arrayDicesState, arrayDicesState1;
     int numOfThrows = 0;
+    int value = 0;
+    TextView back;
+    int bacanja = 0;
+    int maxMin = 0;
+    int coins = 0;
+    Dialog popupDialog;
+    int lastHand = 0;
+    String opponentUID = "";
+
+    int timeTotal = 0;
+    int min = 0;
+    int sec = 0;
+
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private DatabaseReference parRef, myRef, oppRef, coinsRef, profileRef, tabelaRef;
 
 
+    Typeface enchantedLandFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mini_yamb);
 
+
         initLayout();
-        initListeners();
         initData();
-        initText();
+        initListeners();
+
+        enchantedLandFont = Typeface.createFromAsset(getAssets(), "fonts/enchanted_land.ttf");
+
+        new CountDownTimer(1200000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timeTotal = Integer.parseInt("" + millisUntilFinished / 1000);
+                min = timeTotal/60;
+                sec = timeTotal%60;
+                if(min <= 5)
+                    time.setTextColor(RED);
+                time.setText((String.valueOf(min)) +" "+":"+" "+ (String.valueOf(sec)));
+            }
+            public void onFinish() {
+                for (int k = 0; k < 52; k++)
+                    if(arrayCeo[k] == -1)
+                        arrayCeo[k] = 0;
+                yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+                End();
+
+            }
+
+        }.start();
+
     }
 
     private void initLayout() {
@@ -218,6 +280,16 @@ public class MiniYamb extends AppCompatActivity  implements
 
         play = (ImageView) findViewById(R.id.play);
         profile = (ImageView) findViewById(R.id.profile);
+
+        eraser = (ImageView) findViewById(R.id.yamb_eraser);
+        help1 = (ImageView) findViewById(R.id.yamb_help1);
+        help2 = (ImageView) findViewById(R.id.yamb_help2);
+        help3 = (ImageView) findViewById(R.id.yamb_help3);
+
+        txt_coins = (TextView) findViewById(R.id.txt_coins);
+
+        time = (TextView) findViewById(R.id.time);
+
     }
 
     private void initListeners() {
@@ -284,103 +356,162 @@ public class MiniYamb extends AppCompatActivity  implements
         dice5.setOnClickListener(this);
         dice6.setOnClickListener(this);
 
-
-        play.setOnClickListener(this);
         profile.setOnClickListener(this);
-    }
-    private void initText(){
-        down_sum2.addTextChangedListener(this);
-        down_sum1.addTextChangedListener(this);
-        down_sum3.addTextChangedListener(this);
-        up_sum1.addTextChangedListener(this);
-        up_sum2.addTextChangedListener(this);
-        up_sum3.addTextChangedListener(this);
-        free_sum1.addTextChangedListener(this);
-        free_sum2.addTextChangedListener(this);
-        free_sum3.addTextChangedListener(this);
-        hand_sum1.addTextChangedListener(this);
-        hand_sum2.addTextChangedListener(this);
-        hand_sum3.addTextChangedListener(this);
-        yamb_sum1.addTextChangedListener(this);
-        yamb_sum2.addTextChangedListener(this);
-        yamb_sum3.addTextChangedListener(this);
+        play.setOnClickListener(this);
+
+        eraser.setOnClickListener(this);
+
+        help1.setOnClickListener(this);
+        help2.setOnClickListener(this);
+        help3.setOnClickListener(this);
+
+        coinsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                coins = dataSnapshot.getValue(int.class);
+                txt_coins.setText(String.valueOf(coins));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                switch(dataSnapshot.getValue(int.class)){
+                    case 0:
+                        profile.setBackgroundResource(R.drawable.avatar_ridji);
+                        break;
+                    case 1:
+                        profile.setBackgroundResource(R.drawable.avatar_plavi);
+                        break;
+                    case 2:
+                        profile.setBackgroundResource(R.drawable.avatar_zeleni);
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
-    private void initData()
-    {
-        arrayDown = new int[count];
-        arrayUp = new int[count];
-        arrayFree = new int[count];
-        arrayHand = new int[count];
+    private void initData() {
 
-        for (int i = 0; i < count; i++) {
-            arrayHand[i] = -1;
-            arrayFree[i] = -1;
-            arrayUp[i] = -1;
-            arrayDown[i] = -1;
-        }
+        opponentUID = getIntent().getStringExtra("opponent");
+
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        parRef = database.getReference("users");
+
+        myRef = parRef.child(auth.getUid());
+        oppRef = parRef.child(opponentUID);
+
+        coinsRef = myRef.child("coins");
+        tabelaRef = myRef.child("tabela");
+        profileRef = oppRef.child("pic");
+
+        arrayCeo = new Integer[52];
+        for (int i = 0; i < 52; i++)
+            arrayCeo[i] = -1;
+        tabelaRef.setValue(Arrays.asList(arrayCeo));
 
         arrayDicesValue = new int[6];
         arrayDicesState = new boolean[6];
-        played();
+        arrayDicesValue1 = new int[6];
+        arrayDicesState1 = new boolean[6];
+        for (int i = 0; i < 6; i++) {
+            arrayDicesState[i] = true;
+            arrayDicesValue[i] = 0;
+            arrayDicesState1[i] = true;
+            arrayDicesValue1[i] = 0;
+        }
+
+        played(0);
+        eraser.setClickable(false);
+
+        mp_dice = MediaPlayer.create(this, R.raw.rolldices);
+        mp_erase = MediaPlayer.create(this, R.raw.eraser);
+        mp_select = MediaPlayer.create(this, R.raw.diceselect);
+        mp_write = MediaPlayer.create(this, R.raw.write);
+        mp_coins = MediaPlayer.create(this, R.raw.coins);
+
+        sharedPreferences = getApplicationContext().getSharedPreferences("Sound", MODE_PRIVATE);
+        soundON = sharedPreferences.getBoolean("soundON", true);
+
 
     }
 
-    public void down(int i, TextView textView) {
-        if(i == 0){
-            arrayDown[0] = write(i);
-            textView.setText(String.valueOf(arrayDown[0]));
-            played();
-            yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum()));
+    public void SVE(int i, TextView textView) {
+        if (i == 0 || i == 25) {
+            arrayCeo[i] = write(i);
+            textView.setText(String.valueOf(arrayCeo[i]));
+            back = textView;
+            played(i);
+            yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+            tabelaRef.setValue(Arrays.asList(arrayCeo));
+            if(soundON)
+                mp_write.start();
+        } else if (i < 13 && i > 0 && arrayCeo[i - 1] != -1) {
+            arrayCeo[i] = write(i);
+            textView.setText(String.valueOf(arrayCeo[i]));
+            back = textView;
+            played(i);
+            yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+            tabelaRef.setValue(Arrays.asList(arrayCeo));
+            if(soundON)
+                mp_write.start();
+        } else if (i > 12 && i < 25 && arrayCeo[i + 1] != -1) {
+            arrayCeo[i] = write(i);
+            textView.setText(String.valueOf(arrayCeo[i]));
+            back = textView;
+            played(i);
+            yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+            tabelaRef.setValue(Arrays.asList(arrayCeo));
+            if(soundON)
+                mp_write.start();
+        } else if ((i > 38 && i < 52) && numOfThrows == 1) {
+            arrayCeo[i] = write(i);
+            textView.setText(String.valueOf(arrayCeo[i]));
+            back = textView;
+            played(i);
+            yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+            tabelaRef.setValue(Arrays.asList(arrayCeo));
+            if(soundON)
+                mp_write.start();
+
+        } else if (i < 39 && i > 25) {
+            arrayCeo[i] = write(i);
+            textView.setText(String.valueOf(arrayCeo[i]));
+            back = textView;
+            played(i);
+            yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+            tabelaRef.setValue(Arrays.asList(arrayCeo));
+            if(soundON)
+                mp_write.start();
         }
-        else if(arrayDown[i-1] != -1){
-            arrayDown[i] = write(i);
-            textView.setText(String.valueOf(arrayDown[i]));
-            played();
-            yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum()));
-        }
+        if (yamb_sumtotal.getText().toString().equals("0"))
+            yamb_sumtotal.setText("");
+
+        End();
+
     }
 
-    public void up(int i, TextView textView) {
-        if (i == 12) {
-            arrayUp[12] = write(i);
-            textView.setText(String.valueOf(arrayUp[12]));
-            played();
-            yamb_sumtotal.setText(String.valueOf(oneToSixSum()));
+    public void played(int i) {
+        value = i;
+        for (int j = 0; j < 6; j++) {
+            arrayDicesState1[j] = arrayDicesState[j];
+            arrayDicesValue1[j] = arrayDicesValue[j];
+            arrayDicesState[j] = true;
+            arrayDicesValue[j] = 0;
         }
-        else if (arrayUp[i + 1] != -1) {
-            arrayUp[i] = write(i);
-            textView.setText(String.valueOf(arrayUp[i]));
-            played();
-            yamb_sumtotal.setText(String.valueOf(oneToSixSum()));
-        }
-
-    }
-
-    public void free(int i, TextView textView) {
-        arrayFree[i] = write(i);
-        textView.setText(String.valueOf(arrayFree[i]));
-        played();
-        yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum()));
-    }
-
-    public void hand(int i, TextView textView) {
-        if (numOfThrows == 1) {
-            arrayHand[i] = write(i);
-            textView.setText(String.valueOf(arrayHand[i]));
-            played();
-            yamb_sumtotal.setText(String.valueOf(oneToSixSum()));
-        }
-    }
-
-    //reset values after writing in field and sets dices
-    public void played() {
+        bacanja = numOfThrows;
         numOfThrows = 0;
-        for(int i=0; i<6; i++)
-        {
-            arrayDicesState[i]=true;
-            arrayDicesValue[i]=0;
-        }
         GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(dice1);
         GlideApp.with(MiniYamb.this).load(R.drawable.unknown).diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -395,13 +526,17 @@ public class MiniYamb extends AppCompatActivity  implements
                 .skipMemoryCache(true).into(dice6);
         GlideApp.with(MiniYamb.this).load(R.drawable.play).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(play);
-        firstTurn = false;
         play.setClickable(true);
+        eraser.setClickable(true);
+        lastHand = 0;
+        for (int k = 0; k < 39; k++)
+            if(arrayCeo[k] == -1)
+                lastHand++;
     }
 
     public void random(ImageView imageView, int i) {
         Random rand = new Random();
-        int n = rand.nextInt(6)+1;
+        int n = rand.nextInt(6) + 1;
 
         try {
             if (arrayDicesState[i] && imageView != null) {
@@ -439,47 +574,51 @@ public class MiniYamb extends AppCompatActivity  implements
                 }
                 arrayDicesValue[i] = n;
             }
-        }
-        catch (OutOfMemoryError | Exception e)
-        {
+        } catch (OutOfMemoryError | Exception e) {
             //
         }
     }
 
     public void swapDice(ImageView imageView, int i) {
-        try
-        {
-            if(firstTurn) {
-                if (!arrayDicesState[i]) {
-                    arrayDicesState[i] = true;
-                    switch (arrayDicesValue[i]) {
-                        case 1:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange1).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true).into(imageView);
-                            break;
-                        case 2:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange2).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true).into(imageView);
-                            break;
-                        case 3:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange3).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true).into(imageView);
-                            break;
-                        case 4:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange4).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true).into(imageView);
-                            break;
-                        case 5:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange5).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true).into(imageView);
-                            break;
-                        case 6:
-                            GlideApp.with(MiniYamb.this).load(R.drawable.orange6).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true).into(imageView);
-                            break;
-                    }
-
-                } else {
+        try {
+            if (!arrayDicesState[i]) {
+                if(soundON)
+                    mp_select.start();
+                arrayDicesState[i] = true;
+                switch (arrayDicesValue[i]) {
+                    case 1:
+                        GlideApp.with(MiniYamb.this).load(R.drawable.orange1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true).into(imageView);
+                        break;
+                    case 2:
+                        GlideApp.with(MiniYamb.this).load(R.drawable.orange2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true).into(imageView);
+                        break;
+                    case 3:
+                        GlideApp.with(MiniYamb.this).load(R.drawable.orange3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true).into(imageView);
+                        break;
+                    case 4:
+                        GlideApp.with(MiniYamb.this).load(R.drawable.orange4).diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true).into(imageView);
+                        break;
+                    case 5:
+                        GlideApp.with(MiniYamb.this).load(R.drawable.orange5).diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true).into(imageView);
+                        break;
+                    case 6:
+                        GlideApp.with(MiniYamb.this).load(R.drawable.orange6).diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true).into(imageView);
+                        break;
+                }
+            } else {
+                int sel = 0;
+                for (int j = 0; j < 6; j++)
+                    if (!arrayDicesState[j])
+                        sel++;
+                if (sel <= 4) {
+                    if(soundON)
+                        mp_select.start();
                     arrayDicesState[i] = false;
                     switch (arrayDicesValue[i]) {
 
@@ -510,32 +649,26 @@ public class MiniYamb extends AppCompatActivity  implements
                     }
                 }
             }
-        }
-        catch (OutOfMemoryError | Exception e)
-        {
+        } catch (OutOfMemoryError | Exception e) {
             //
         }
     }
 
-    private boolean firstTurn = false;
-
     public void swapPlay(ImageView imageView) {
         numOfThrows++;
-        try
-        {
-            if(numOfThrows == 1)
-            {
+        try {
+            if (numOfThrows == 1) {
+                if(lastHand == 0)
+                    play.setClickable(false);
+                eraser.setClickable(false);
                 GlideApp.with(MiniYamb.this).load(R.drawable.play1).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).into(imageView);
-                firstTurn = true;
             }
-            if(numOfThrows == 2)
-            {
+            if (numOfThrows == 2) {
                 GlideApp.with(MiniYamb.this).load(R.drawable.play2).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).into(imageView);
             }
-            if(numOfThrows == 3)
-            {
+            if (numOfThrows == 3) {
                 GlideApp.with(MiniYamb.this).load(R.drawable.play3).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).into(imageView);
                 play.setClickable(false);
@@ -554,90 +687,87 @@ public class MiniYamb extends AppCompatActivity  implements
                 random(dice5, 4);
             if (arrayDicesState[5])
                 random(dice6, 5);
-        }
-        catch (OutOfMemoryError | Exception e)
-        {
+        } catch (OutOfMemoryError | Exception e) {
             //
         }
     }
 
-    public int write (int i) {
+    public int write(int i) {
         int sum = 0;
-        int brFalse = 0;
-        if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5) {
+        if ((i >= 0 && i <= 5) || (i >= 13 && i <= 18) || (i >= 26 && i <= 31) || (i >= 39 && i <= 44)) {
             for (int j = 0; j < 6; j++) {
                 if (!arrayDicesState[j]) {
                     if (arrayDicesValue[j] == i + 1)
-                        brFalse++;
+                        sum += (i + 1);
+                    else if (arrayDicesValue[j] == i - 12)
+                        sum += (i - 12);
+                    else if (arrayDicesValue[j] == i - 25)
+                        sum += (i - 25);
+                    else if (arrayDicesValue[j] == i - 38)
+                        sum += (i - 38);
+
                 }
             }
-            if (brFalse == 6) {
-                brFalse = 5;
-                sum += (i + 1) * brFalse;
-            }
-            else
-                sum += (i + 1) * brFalse;
 
-        }
-        else if (i == 6 || i == 7) {
-            List<Integer> list = Arrays.asList(arrayDicesValue[0], arrayDicesValue[1], arrayDicesValue[2], arrayDicesValue[3], arrayDicesValue[4], arrayDicesValue[5]);
-            int min = Collections.min(list);
-            int max = Collections.max(list);
-            if (i == 6) {
-                for (int j = 0; j < 6; j++)
+        } else if (i == 6 || i == 7 || i == 19 || i == 20 || i == 32 || i == 33 || i == 45 || i == 46) {
+            for (int j = 0; j < 6; j++) {
+                if (!arrayDicesState[j])
                     sum += arrayDicesValue[j];
-                sum -= min;
-            } else {
-                for (int j = 0; j < 6; j++)
-                    sum += arrayDicesValue[j];
-                sum -= max;
             }
-        } /*else if (i == 8) {
-            int n;
-            for (int j = 0; j < 6; j++)
-                if (!arrayDicesState[j]) {
-                    for (int k = 0; k < 5; k++) {
-                        if (arrayDicesValue[k] == k + 1 || arrayDicesValue[k] == k + 2 || arrayDicesValue[k] == k + 3 || arrayDicesValue[k] == k + 4 || arrayDicesValue[k] == k + 5)
-
-
+        } else if (i == 8 || i == 21 || i == 34 || i == 47) {
+            int[] kenta = {2, 3, 4, 5};
+            int l = 0;
+            for (int j = 0; j < 6; j++) {
+                for (int k = 0; k < 4; k++) {
+                    if (!arrayDicesState[j] && arrayDicesValue[j] == kenta[k]) {
+                        kenta[k] += 5;
+                        l++;
                     }
                 }
-        }*/
-        else if(i == 9 || i == 12 || i == 11 || i ==10)
-        {
-            int x;
-            int n;
+            }
+            if (l == 4) {
+                for (int j = 0; j < 6; j++)
+                    if (!arrayDicesState[j] && (arrayDicesValue[j] == 1 || arrayDicesValue[j] == 6)) {
+                        if (numOfThrows == 1)
+                            sum = 66;
+                        else if (numOfThrows == 2)
+                            sum = 56;
+                        else if (numOfThrows == 3)
+                            sum = 46;
+                    }
+            }
+        } else if ((i >= 9 && i <= 12) || (i >= 22 && i <= 25) || (i >= 35 && i <= 38) || (i >= 48 && i <= 51)) {
+            int x = 0;
+            int n = 0;
             int sf = 0;
-            if (i == 9 || i == 10){
+            if (i == 9 || i == 10 || i == 22 || i == 23 || i == 35 || i == 36 || i == 48 || i == 49) {
                 x = 3;
                 n = 20;
-            }
-            else if (i == 11) {
+            } else if (i == 11 || i == 24 || i == 37 || i == 50) {
                 x = 4;
                 n = 40;
-            }
-            else{
+            } else if (i == 12 || i == 25 || i == 38 || i == 51) {
                 x = 5;
                 n = 50;
             }
-            for(int m = 0; m < 6; m++){
-                    int count;
-                    for (int k = 1; k < 7; k++) {
-                        if (!arrayDicesState[m] && k == arrayDicesValue[m])
-                            continue;
-                        count = 0;
-                        for (int j = 0; j < 6; j++) {
-                            if (!arrayDicesState[j] && arrayDicesValue[j] == k)
-                                count++;
-                        }
-                        if (count >= x) {
-                            sum = k * x + n;
-                            sf = k;
-                        }
+            for (int m = 0; m < 6; m++) {
+                int count;
+                for (int k = 1; k < 7; k++) {
+                    if (!arrayDicesState[m] && k == arrayDicesValue[m])
+                        continue;
+                    count = 0;
+                    for (int j = 0; j < 6; j++) {
+                        if (!arrayDicesState[j] && arrayDicesValue[j] == k)
+                            count++;
                     }
-                if ( i == 10 && sum != 0 ) {
-                        int sum1 = 0;
-                        for(int a = 0; a < 6; a++) {
+                    if (count >= x) {
+                        sum = k * x + n;
+                        sf = k;
+                    }
+                }
+                if ((i == 10 || i == 23 || i == 36 || i == 49) && sum != 0) {
+                    int sum1 = 0;
+                    for (int a = 0; a < 6; a++) {
                         int count1;
                         for (int k = 1; k < 7; k++) {
                             if (!arrayDicesState[a] && k == arrayDicesValue[a] && k != sf)
@@ -656,112 +786,12 @@ public class MiniYamb extends AppCompatActivity  implements
                     }
                 }
             }
+            if (x == 5 && sum != 0) {
+                coins += 200;
+                txt_coins.setText(String.valueOf(coins));
+            }
         }
         return sum;
-    }
-
-    public void oneToSfixSum(int j){
-        int sum = 0;
-        if ( j == 0 || j == 1 || j == 2 || j == 3 || j == 4 || j == 5) {
-            for (int i = 0; i < 6; i++) {
-                if (arrayDown[i] == -1)
-                    sum++;
-                sum += arrayDown[i];
-            }
-            if (sum >= 60)
-                sum += 30;
-            down_sum1.setText(String.valueOf(sum));
-        }
-        else if ( j == 7) {
-            if (arrayDown[0] != -1 && arrayDown[6] != -1 && arrayDown[7] != -1)
-                down_sum2.setText(String.valueOf((arrayDown[6] - arrayDown[7]) * arrayDown[0]));
-        }
-        else if ( j == 8 || j == 9 || j == 10 || j ==11 || j == 12) {
-            for (int i = 8; i < 13; i++) {
-                if (arrayDown[i] == -1)
-                    sum++;
-                sum += arrayDown[i];
-            }
-            down_sum3.setText(String.valueOf(sum));
-        }
-    }
-
-    public void upSum(int j){
-        int sum = 0;
-        if ( j == 0 || j == 1 || j == 2 || j == 3 || j == 4 || j == 5) {
-            for (int i = 0; i < 6; i++) {
-                if (arrayUp[i] == -1)
-                    sum++;
-                sum += arrayUp[i];
-            }
-            if (sum >= 60)
-                sum += 30;
-            up_sum1.setText(String.valueOf(sum));
-        }
-        else if ( j == 0) {
-            if (arrayUp[0] != -1 && arrayUp[6] != -1 && arrayUp[7] != -1)
-                down_sum2.setText(String.valueOf((arrayUp[6] - arrayUp[7]) * arrayUp[0]));
-        }
-        else if ( j == 8 || j == 9 || j == 10 || j ==11 || j == 12) {
-            for (int i = 8; i < 13; i++) {
-                if (arrayUp[i] == -1)
-                    sum++;
-                sum += arrayUp[i];
-            }
-            up_sum3.setText(String.valueOf(sum));
-        }
-    }
-
-    public void freeSum(int j){
-        int sum = 0;
-        if ( j == 0 || j == 1 || j == 2 || j == 3 || j == 4 || j == 5) {
-            for (int i = 0; i < 6; i++) {
-                if (arrayFree[i] == -1)
-                    sum++;
-                sum += arrayFree[i];
-            }
-            if (sum >= 60)
-                sum += 30;
-            free_sum1.setText(String.valueOf(sum));
-        }
-        else if ((j == 7 || j == 6 || j == 0) && (arrayFree[6] != -1 && arrayFree[7] != -1 && arrayFree[0] != -1)) {
-            if (arrayFree[0] != -1 && arrayFree[6] != -1 && arrayFree[7] != -1)
-                free_sum2.setText(String.valueOf((arrayFree[6] - arrayFree[7]) * arrayFree[0]));
-        }
-        else if ( j == 8 || j == 9 || j == 10 || j ==11 || j == 12) {
-            for (int i = 8; i < 13; i++) {
-                if (arrayFree[i] == -1)
-                    sum++;
-                sum += arrayFree[i];
-            }
-            free_sum3.setText(String.valueOf(sum));
-        }
-    }
-
-    public void handSum(int j){
-        int sum = 0;
-        if ( j == 0 || j == 1 || j == 2 || j == 3 || j == 4 || j == 5) {
-            for (int i = 0; i < 6; i++) {
-                if (arrayHand[i] == -1)
-                    sum++;
-                sum += arrayHand[i];
-            }
-            if (sum >= 60)
-                sum += 30;
-            hand_sum1.setText(String.valueOf(sum));
-        }
-        else if ((j == 7 || j == 6 || j == 0) && (arrayHand[6] != -1 && arrayHand[7] != -1 && arrayHand[0] != -1)) {
-            if (arrayHand[0] != -1 && arrayHand[6] != -1 && arrayHand[7] != -1)
-                hand_sum2.setText(String.valueOf((arrayHand[6] - arrayHand[7]) * arrayHand[0]));
-        }
-        else if ( j == 8 || j == 9 || j == 10 || j ==11 || j == 12) {
-            for (int i = 8; i < 13; i++) {
-                if (arrayHand[i] == -1)
-                    sum++;
-                sum += arrayHand[i];
-            }
-            hand_sum3.setText(String.valueOf(sum));
-        }
     }
 
     public int oneToSixSum() {
@@ -771,18 +801,18 @@ public class MiniYamb extends AppCompatActivity  implements
         int sum4 = 0;
         int sum3 = 0;
         for (int i = 0; i < 6; i++) {
-            if (arrayDown[i] == -1)
+            if (arrayCeo[i] == -1)
                 sum1++;
-            sum1 += arrayDown[i];
-            if (arrayUp[i] == -1)
+            sum1 += arrayCeo[i];
+            if (arrayCeo[i + 13] == -1)
                 sum2++;
-            sum2 += arrayUp[i];
-            if (arrayFree[i] == -1)
+            sum2 += arrayCeo[i + 13];
+            if (arrayCeo[i + 26] == -1)
                 sum3++;
-            sum3 += arrayFree[i];
-            if (arrayHand[i] == -1)
+            sum3 += arrayCeo[i + 26];
+            if (arrayCeo[i + 39] == -1)
                 sum4++;
-            sum4 += arrayHand[i];
+            sum4 += arrayCeo[i + 39];
         }
         if (sum1 >= 60)
             sum1 += 30;
@@ -792,307 +822,572 @@ public class MiniYamb extends AppCompatActivity  implements
             sum3 += 30;
         if (sum4 >= 60)
             sum4 += 30;
-        sum = sum1+sum2+sum3+sum4;
-        if(sum1 != 0)
+        sum = sum1 + sum2 + sum3 + sum4;
+        if (sum1 != 0)
             down_sum1.setText(String.valueOf(sum1));
-        if(sum2 != 0)
+        else
+            down_sum1.setText("");
+        if (sum2 != 0)
             up_sum1.setText(String.valueOf(sum2));
-        if(sum3 != 0)
+        else
+            up_sum1.setText("");
+        if (sum3 != 0)
             free_sum1.setText(String.valueOf(sum3));
-        if(sum4 != 0)
+        else
+            free_sum1.setText("");
+        if (sum4 != 0)
             hand_sum1.setText(String.valueOf(sum4));
-        yamb_sum1.setText(String.valueOf(sum));
+        else
+            hand_sum1.setText("");
+        if (sum != 0)
+            yamb_sum1.setText(String.valueOf(sum));
+        else
+            yamb_sum1.setText("");
         return sum;
     }
 
-    public int MaxMinSum(){
+    public int MaxMinSum() {
         int sum = 0;
         int sum1 = 0;
         int sum2 = 0;
         int sum3 = 0;
         int sum4 = 0;
-        if (arrayDown[7] != -1)
-            sum1 = (arrayDown[6] - arrayDown[7]) * arrayDown[0];
-        if (arrayUp[0] != -1)
-            sum2 = (arrayUp[6] - arrayUp[7]) * arrayUp[0];
-        if (arrayFree[0] != -1 && arrayFree[6] != -1 && arrayFree[7] != -1)
-            sum3 = (arrayFree[6] - arrayFree[7]) * arrayFree[0];
-        if (arrayHand[0] != -1 && arrayHand[6] != -1 && arrayHand[7] != -1)
-            sum3 = (arrayHand[6] - arrayHand[7]) * arrayHand[0];
-        sum = sum1+sum2+sum3+sum4;
-        if(sum1 != 0)
+        if (arrayCeo[7] != -1)
+            sum1 = (arrayCeo[6] - arrayCeo[7]) * arrayCeo[0];
+        if (arrayCeo[13] != -1)
+            sum2 = (arrayCeo[19] - arrayCeo[20]) * arrayCeo[13];
+        if (arrayCeo[26] != -1 && arrayCeo[32] != -1 && arrayCeo[33] != -1)
+            sum3 = (arrayCeo[32] - arrayCeo[33]) * arrayCeo[26];
+        if (arrayCeo[39] != -1 && arrayCeo[45] != -1 && arrayCeo[46] != -1)
+            sum4 = (arrayCeo[45] - arrayCeo[46]) * arrayCeo[39];
+        sum = sum1 + sum2 + sum3 + sum4;
+        if (sum1 != 0)
             down_sum2.setText(String.valueOf(sum1));
-        if(sum2 != 0)
+        else
+            down_sum2.setText("");
+        if (sum2 != 0)
             up_sum2.setText(String.valueOf(sum2));
-        if(sum3 != 0)
+        else
+            up_sum2.setText("");
+        if (sum3 != 0)
             free_sum2.setText(String.valueOf(sum3));
-        if(sum4 != 0)
+        else
+            free_sum2.setText("");
+        if (sum4 != 0)
             hand_sum2.setText(String.valueOf(sum4));
-        yamb_sum2.setText(String.valueOf(sum));
+        else
+            hand_sum2.setText("");
+        if (sum != 0)
+            yamb_sum2.setText(String.valueOf(sum));
+        else
+            yamb_sum2.setText("");
         return sum;
+    }
+
+    public int TheLastOne() {
+        int sum = 0;
+        int sum1 = 0;
+        int sum2 = 0;
+        int sum3 = 0;
+        int sum4 = 0;
+        for (int i = 8; i < 13; i++) {
+            if (arrayCeo[i] == -1)
+                sum1++;
+            sum1 += arrayCeo[i];
+            if (arrayCeo[i + 13] == -1)
+                sum2++;
+            sum2 += arrayCeo[i + 13];
+            if (arrayCeo[i + 26] == -1)
+                sum3++;
+            sum3 += arrayCeo[i + 26];
+            if (arrayCeo[i + 39] == -1)
+                sum4++;
+            sum4 += arrayCeo[i + 39];
+        }
+        sum = sum1 + sum2 + sum3 + sum4;
+        if (sum1 != 0)
+            down_sum3.setText(String.valueOf(sum1));
+        else
+            down_sum3.setText("");
+        if (sum2 != 0)
+            up_sum3.setText(String.valueOf(sum2));
+        else
+            up_sum3.setText("");
+        if (sum3 != 0)
+            free_sum3.setText(String.valueOf(sum3));
+        else
+            free_sum3.setText("");
+        if (sum4 != 0)
+            hand_sum3.setText(String.valueOf(sum4));
+        else
+            hand_sum3.setText("");
+        if (sum != 0)
+            yamb_sum3.setText(String.valueOf(sum));
+        else
+            yamb_sum3.setText("");
+        return sum;
+    }
+
+    public void BackDices(ImageView imageView, int i) {
+
+        switch (arrayDicesValue1[i]) {
+            case 1:
+                if (arrayDicesState1[i])
+                    GlideApp.with(MiniYamb.this).load(R.drawable.orange1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                else
+                    GlideApp.with(MiniYamb.this).load(R.drawable.red1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                break;
+            case 2:
+                if (arrayDicesState1[i])
+                    GlideApp.with(MiniYamb.this).load(R.drawable.orange2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                else
+                    GlideApp.with(MiniYamb.this).load(R.drawable.red2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                break;
+            case 3:
+                if (arrayDicesState1[i])
+                    GlideApp.with(MiniYamb.this).load(R.drawable.orange3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                else
+                    GlideApp.with(MiniYamb.this).load(R.drawable.red3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                break;
+            case 4:
+                if (arrayDicesState1[i])
+                    GlideApp.with(MiniYamb.this).load(R.drawable.orange4).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                else
+                    GlideApp.with(MiniYamb.this).load(R.drawable.red4).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                break;
+            case 5:
+                if (arrayDicesState1[i])
+                    GlideApp.with(MiniYamb.this).load(R.drawable.orange5).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                else
+                    GlideApp.with(MiniYamb.this).load(R.drawable.red5).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                break;
+            case 6:
+                if (arrayDicesState1[i])
+                    GlideApp.with(MiniYamb.this).load(R.drawable.orange6).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                else
+                    GlideApp.with(MiniYamb.this).load(R.drawable.red6).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).into(imageView);
+                break;
+        }
+        eraser.setClickable(false);
+    }
+
+    public void BackValue() {
+        if ((value == 12 || value == 25 || value == 38 || value == 51) && arrayCeo[value] != 0) {
+            coins -= 200;
+            txt_coins.setText(String.valueOf(coins));
+        }
+
+        arrayCeo[value] = -1;
+        back.setText("");
+        numOfThrows = bacanja;
+        for (int j = 0; j < 6; j++) {
+            arrayDicesState[j] = arrayDicesState1[j];
+            arrayDicesValue[j] = arrayDicesValue1[j];
+        }
+        if (bacanja == 1) {
+            eraser.setClickable(false);
+            GlideApp.with(MiniYamb.this).load(R.drawable.play1).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(play);
+        }
+        if (bacanja == 2) {
+            GlideApp.with(MiniYamb.this).load(R.drawable.play2).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(play);
+        }
+        if (bacanja == 3) {
+            GlideApp.with(MiniYamb.this).load(R.drawable.play3).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(play);
+            play.setClickable(false);
+        }
+        yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+        if (yamb_sumtotal.getText().toString().equals("0"))
+            yamb_sumtotal.setText("");
+        if(lastHand == 0)
+            play.setClickable(false);
 
     }
 
+    public void Help(ImageView imageView) {
+        if (imageView == help1 && numOfThrows == 3 && coins >= 100) {
+            if (arrayCeo[39] == -1) {
+                arrayCeo[39] = 5;
+                hand_1.setText(String.valueOf(5));
+                back = hand_1;
+                played(39);
+                coins -= 100;
+                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
+                eraser.setClickable(false);
+                tabelaRef.setValue(Arrays.asList(arrayCeo));
+                if(soundON)
+                    mp_coins.start();
+            } else if (arrayCeo[0] == -1) {
+                arrayCeo[0] = 5;
+                down_1.setText(String.valueOf(5));
+                back = down_1;
+                played(0);
+                coins -= 100;
+                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
+                eraser.setClickable(false);
+                tabelaRef.setValue(Arrays.asList(arrayCeo));
+                if(soundON)
+                    mp_coins.start();
+            } else {
+                Toast.makeText(this, "No one can help you anymore", Toast.LENGTH_SHORT).show();
+                if (soundON)
+                    mp_coins.start();
+            }
+        } else if (imageView == help2 && numOfThrows == 3 && coins >= 150) {
+            if (arrayCeo[46] == -1) {
+                arrayCeo[46] = 5;
+                hand_min.setText(String.valueOf(5));
+                back = hand_min;
+                played(46);
+                coins -= 150;
+                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
+                eraser.setClickable(false);
+                tabelaRef.setValue(Arrays.asList(arrayCeo));
+                if(soundON)
+                    mp_coins.start();
+            } else if (arrayCeo[45] == -1) {
+                arrayCeo[45] = 30;
+                hand_max.setText(String.valueOf(30));
+                back = hand_max;
+                played(45);
+                coins -= 150;
+                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
+                eraser.setClickable(false);
+                tabelaRef.setValue(Arrays.asList(arrayCeo));
+                if(soundON)
+                    mp_coins.start();
+            } else {
+                Toast.makeText(this, "No one can help you anymore", Toast.LENGTH_SHORT).show();
+                if (soundON)
+                    mp_coins.start();
+            }
+        } else if (imageView == help3 && numOfThrows == 3 && coins >= 200) {
+            if (arrayCeo[51] == -1) {
+                arrayCeo[51] = 80;
+                hand_yamb.setText(String.valueOf(80));
+                back = hand_yamb;
+                played(51);
+                coins -= 200;
+                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
+                eraser.setClickable(false);
+                tabelaRef.setValue(Arrays.asList(arrayCeo));
+                if(soundON)
+                    mp_coins.start();
+            } else if (arrayCeo[25] == -1) {
+                arrayCeo[25] = 80;
+                up_yamb.setText(String.valueOf(80));
+                back = up_yamb;
+                played(25);
+                coins -= 200;
+                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
+                eraser.setClickable(false);
+                tabelaRef.setValue(Arrays.asList(arrayCeo));
+                if(soundON)
+                    mp_coins.start();
+            } else {
+                Toast.makeText(this, "No one can help you anymore", Toast.LENGTH_SHORT).show();
+                if (soundON)
+                    mp_coins.start();
+            }
+            if(coins < 100 && imageView == help1)
+                Toast.makeText(this, "Not enough coins", Toast.LENGTH_SHORT).show();
+            if(coins < 150 && imageView == help2)
+                Toast.makeText(this, "Not enough coins", Toast.LENGTH_SHORT).show();
+            if(coins < 200 && imageView == help3)
+                Toast.makeText(this, "Not enough coins", Toast.LENGTH_SHORT).show();
+        }
+        yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
+        if (yamb_sumtotal.getText().toString().equals("0"))
+            yamb_sumtotal.setText("");
+        End();
+    }
 
+    public void End() {
+        int n = 0;
+        for (int i = 0; i < 52; i++)
+            if (arrayCeo[i] == -1)
+                n++;
+        if (n == 0) {
+            popupDialog = new Dialog(this);
+            popupDialog.setContentView(R.layout.popup_endgame);
+            popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            popupDialog.show();
+            TextView win;
+            win = (TextView) popupDialog.findViewById(R.id.points_win);
+            win.setText(yamb_sumtotal.toString());
+        }
+    }
 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            popupDialog = new Dialog(this);
+            popupDialog.setContentView(R.layout.popup_exitgame);
+            popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            popupDialog.show();
+            ImageView btn_yes;
+            ImageView btn_no;
+            TextView txt_goback;
+            txt_goback = (TextView) popupDialog.findViewById(R.id.txt_goback);
+            txt_goback.setTypeface(enchantedLandFont);
+            btn_no = (ImageView) popupDialog.findViewById(R.id.btn_no);
+            btn_yes = (ImageView) popupDialog.findViewById(R.id.btn_yes);
+            btn_yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {//
+                    onBackPressed();
 
+                }
+            });
+            btn_no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupDialog.dismiss();
+                }
+            });
+        }
+        return false;
+    }
 
     @Override
     public void onClick(View v) {
-        if(numOfThrows != 0) {
+        for (int j = 0; j < 6; j++)
+            if (!arrayDicesState[j])
+                maxMin++;
+        if (numOfThrows != 0) {
             switch (v.getId()) {
                 // 2. column - down
                 case R.id.down_1:
-                    if (arrayDown[0] == -1)
-                        down(0, down_1);
+                    if (arrayCeo[0] == -1)
+                        SVE(0, down_1);
                     break;
                 case R.id.down_2:
-                    if (arrayDown[1] == -1)
-                        down(1, down_2);
+                    if (arrayCeo[1] == -1)
+                        SVE(1, down_2);
                     break;
                 case R.id.down_3:
-                    if (arrayDown[2] == -1)
-                        down(2, down_3);
+                    if (arrayCeo[2] == -1)
+                        SVE(2, down_3);
                     break;
                 case R.id.down_4:
-                    if (arrayDown[3] == -1)
-                        down(3, down_4);
+                    if (arrayCeo[3] == -1)
+                        SVE(3, down_4);
                     break;
                 case R.id.down_5:
-                    if (arrayDown[4] == -1)
-                        down(4, down_5);
+                    if (arrayCeo[4] == -1)
+                        SVE(4, down_5);
                     break;
                 case R.id.down_6:
-                    if (arrayDown[5] == -1)
-                        down(5, down_6);
-                    break;
-
-                case R.id.down_max:
-                    if (arrayDown[6] == -1)
-                        down(6, down_max);
-                    break;
-                case R.id.down_min:
-                    if (arrayDown[7] == -1)
-                        down(7, down_min);
+                    if (arrayCeo[5] == -1)
+                        SVE(5, down_6);
                     break;
 
                 case R.id.down_straight:
-                    if (arrayDown[8] == -1)
-                        down(8, down_straight);
+                    if (arrayCeo[8] == -1)
+                        SVE(8, down_straight);
                     break;
                 case R.id.down_three:
-                    if (arrayDown[9] == -1)
-                        down(9, down_three);
+                    if (arrayCeo[9] == -1)
+                        SVE(9, down_three);
                     break;
                 case R.id.down_full:
-                    if (arrayDown[10] == -1)
-                        down(10, down_full);
+                    if (arrayCeo[10] == -1)
+                        SVE(10, down_full);
                     break;
                 case R.id.down_poker:
-                    if (arrayDown[11] == -1)
-                        down(11, down_poker);
+                    if (arrayCeo[11] == -1)
+                        SVE(11, down_poker);
                     break;
                 case R.id.down_yamb:
-                    if (arrayDown[12] == -1)
-                        down(12, down_yamb);
+                    if (arrayCeo[12] == -1)
+                        SVE(12, down_yamb);
                     break;
 
                 // 3. column - up
                 case R.id.up_1:
-                    if (arrayUp[0] == -1)
-                        up(0, up_1);
+                    if (arrayCeo[13] == -1)
+                        SVE(13, up_1);
                     break;
 
                 case R.id.up_2:
-                    if (arrayUp[1] == -1)
-                        up(1, up_2);
+                    if (arrayCeo[14] == -1)
+                        SVE(14, up_2);
                     break;
 
                 case R.id.up_3:
-                    if (arrayUp[2] == -1)
-                        up(2, up_3);
+                    if (arrayCeo[15] == -1)
+                        SVE(15, up_3);
                     break;
 
                 case R.id.up_4:
-                    if (arrayUp[3] == -1)
-                        up(3, up_4);
+                    if (arrayCeo[16] == -1)
+                        SVE(16, up_4);
                     break;
 
                 case R.id.up_5:
-                    if (arrayUp[4] == -1)
-                        up(4, up_5);
+                    if (arrayCeo[17] == -1)
+                        SVE(17, up_5);
                     break;
 
                 case R.id.up_6:
-                    if (arrayUp[5] == -1)
-                        up(5, up_6);
-                    break;
-
-                case R.id.up_max:
-                    if (arrayUp[6] == -1)
-                        up(6, up_max);
-                    break;
-
-                case R.id.up_min:
-                    if (arrayUp[7] == -1)
-                        up(7, up_min);
+                    if (arrayCeo[18] == -1)
+                        SVE(18, up_6);
                     break;
 
                 case R.id.up_straight:
-                    if (arrayUp[8] == -1)
-                        up(8, up_straight);
+                    if (arrayCeo[21] == -1)
+                        SVE(21, up_straight);
                     break;
 
                 case R.id.up_three:
-                    if (arrayUp[9] == -1)
-                        up(9, up_three);
+                    if (arrayCeo[22] == -1)
+                        SVE(22, up_three);
                     break;
 
                 case R.id.up_full:
-                    if (arrayUp[10] == -1)
-                        up(10, up_full);
+                    if (arrayCeo[23] == -1)
+                        SVE(23, up_full);
                     break;
 
                 case R.id.up_poker:
-                    if (arrayUp[11] == -1)
-                        up(11, up_poker);
+                    if (arrayCeo[24] == -1)
+                        SVE(24, up_poker);
                     break;
 
                 case R.id.up_yamb:
-                    if (arrayUp[12] == -1)
-                        up(12, up_yamb);
+                    if (arrayCeo[25] == -1)
+                        SVE(25, up_yamb);
                     break;
 
                 // 3. column - free
                 case R.id.free_1:
-                    if (arrayFree[0] == -1)
-                        free(0, free_1);
+                    if (arrayCeo[26] == -1)
+                        SVE(26, free_1);
                     break;
 
                 case R.id.free_2:
-                    if (arrayFree[1] == -1)
-                        free(1, free_2);
+                    if (arrayCeo[27] == -1)
+                        SVE(27, free_2);
                     break;
 
                 case R.id.free_3:
-                    if (arrayFree[2] == -1)
-                        free(2, free_3);
+                    if (arrayCeo[28] == -1)
+                        SVE(28, free_3);
                     break;
 
                 case R.id.free_4:
-                    if (arrayFree[3] == -1)
-                        free(3, free_4);
+                    if (arrayCeo[29] == -1)
+                        SVE(29, free_4);
                     break;
 
                 case R.id.free_5:
-                    if (arrayFree[4] == -1)
-                        free(4, free_5);
+                    if (arrayCeo[30] == -1)
+                        SVE(30, free_5);
                     break;
 
                 case R.id.free_6:
-                    if (arrayFree[5] == -1)
-                        free(5, free_6);
-                    break;
-
-                case R.id.free_max:
-                    if (arrayFree[6] == -1)
-                        free(6, free_max);
-                    break;
-
-                case R.id.free_min:
-                    if (arrayFree[7] == -1)
-                        free(7, free_min);
+                    if (arrayCeo[31] == -1)
+                        SVE(31, free_6);
                     break;
 
                 case R.id.free_straight:
-                    if (arrayFree[8] == -1)
-                        free(8, free_straight);
+                    if (arrayCeo[34] == -1)
+                        SVE(34, free_straight);
                     break;
 
                 case R.id.free_three:
-                    if (arrayFree[9] == -1)
-                        free(9, free_three);
+                    if (arrayCeo[35] == -1)
+                        SVE(35, free_three);
                     break;
 
                 case R.id.free_full:
-                    if (arrayFree[10] == -1)
-                        free(10, free_full);
+                    if (arrayCeo[36] == -1)
+                        SVE(36, free_full);
                     break;
 
                 case R.id.free_poker:
-                    if (arrayFree[11] == -1)
-                        free(11, free_poker);
+                    if (arrayCeo[37] == -1)
+                        SVE(37, free_poker);
                     break;
 
                 case R.id.free_yamb:
-                    if (arrayFree[12] == -1)
-                        free(12, free_yamb);
+                    if (arrayCeo[38] == -1)
+                        SVE(38, free_yamb);
                     break;
 
                 // 4. column - hand
                 case R.id.hand_1:
-                    if (arrayHand[0] == -1)
-                        hand(0, hand_1);
+                    if (arrayCeo[39] == -1)
+                        SVE(39, hand_1);
                     break;
 
                 case R.id.hand_2:
-                    if (arrayHand[1] == -1)
-                        hand(1, hand_2);
+                    if (arrayCeo[40] == -1)
+                        SVE(40, hand_2);
                     break;
 
                 case R.id.hand_3:
-                    if (arrayHand[2] == -1)
-                        hand(2, hand_3);
+                    if (arrayCeo[41] == -1)
+                        SVE(41, hand_3);
                     break;
 
                 case R.id.hand_4:
-                    if (arrayHand[3] == -1)
-                        hand(3, hand_4);
+                    if (arrayCeo[42] == -1)
+                        SVE(42, hand_4);
                     break;
 
                 case R.id.hand_5:
-                    if (arrayHand[4] == -1)
-                        hand(4, hand_5);
+                    if (arrayCeo[43] == -1)
+                        SVE(43, hand_5);
                     break;
 
                 case R.id.hand_6:
-                    if (arrayHand[5] == -1)
-                        hand(5, hand_6);
-                    break;
-
-                case R.id.hand_max:
-                    if (arrayHand[6] == -1)
-                        hand(6, hand_max);
-                    break;
-
-                case R.id.hand_min:
-                    if (arrayHand[7] == -1)
-                        hand(7, hand_min);
+                    if (arrayCeo[44] == -1)
+                        SVE(44, hand_6);
                     break;
 
                 case R.id.hand_straight:
-                    if (arrayHand[8] == -1)
-                        hand(8, hand_straight);
+                    if (arrayCeo[47] == -1)
+                        SVE(47, hand_straight);
                     break;
 
                 case R.id.hand_three:
-                    if (arrayHand[9] == -1)
-                        hand(9, hand_three);
+                    if (arrayCeo[48] == -1)
+                        SVE(48, hand_three);
                     break;
 
                 case R.id.hand_full:
-                    if (arrayHand[10] == -1)
-                        hand(10, hand_full);
+                    if (arrayCeo[49] == -1)
+                        SVE(49, hand_full);
                     break;
 
                 case R.id.hand_poker:
-                    if (arrayHand[11] == -1)
-                        hand(11, hand_poker);
+                    if (arrayCeo[50] == -1)
+                        SVE(50, hand_poker);
                     break;
 
                 case R.id.hand_yamb:
-                    if (arrayHand[12] == -1)
-                        hand(12, hand_yamb);
+                    if (arrayCeo[51] == -1)
+                        SVE(51, hand_yamb);
                     break;
 
                 // Dices
@@ -1119,40 +1414,128 @@ public class MiniYamb extends AppCompatActivity  implements
                 case R.id.dice6:
                     swapDice(dice6, 5);
                     break;
+
+                case R.id.down_max:
+                    if (arrayCeo[6] == -1 && arrayCeo[5] != -1)
+                        if (maxMin == 5)
+                            SVE(6, down_max);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.down_min:
+                    if (arrayCeo[7] == -1 && arrayCeo[6] != -1)
+                        if (maxMin == 5)
+                            SVE(7, down_min);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.up_max:
+                    if (arrayCeo[19] == -1 && arrayCeo[20] != -1)
+                        if (maxMin == 5)
+                            SVE(19, up_max);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.up_min:
+                    if (arrayCeo[20] == -1 && arrayCeo[21] != -1)
+                        if (maxMin == 5)
+                            SVE(20, up_min);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.free_max:
+                    if (arrayCeo[32] == -1)
+                        if (maxMin == 5)
+                            SVE(32, free_max);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.free_min:
+                    if (arrayCeo[33] == -1)
+                        if (maxMin == 5)
+                            SVE(33, free_min);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.hand_max:
+                    if (arrayCeo[45] == -1 && numOfThrows == 1)
+                        if (maxMin == 5)
+                            SVE(45, hand_max);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.hand_min:
+                    if (arrayCeo[46] == -1 && numOfThrows == 1)
+                        if (maxMin == 5)
+                            SVE(46, hand_min);
+                        else
+                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
+        maxMin = 0;
+
         switch (v.getId()) {
             case R.id.play:
+                if (soundON)
+                    mp_dice.start();
                 swapPlay(play);
                 break;
 
-            case R.id.profile:
-                Intent i;
-                i = new Intent(MiniYamb.this, MiniYambOpponent.class);
-                startActivity(i);
+            case R.id.yamb_help1:
+                Help(help1);
                 break;
+
+            case R.id.yamb_help2:
+                Help(help2);
+                break;
+
+            case R.id.yamb_help3:
+                Help(help3);
+                break;
+            case R.id.yamb_eraser:
+                if (soundON)
+                    mp_erase.start();
+
+                BackDices(dice1, 0);
+                BackDices(dice2, 1);
+                BackDices(dice3, 2);
+                BackDices(dice4, 3);
+                BackDices(dice5, 4);
+                BackDices(dice6, 5);
+                BackValue();
+                break;
+                
+            case R.id.profile:
+                Intent goToOpp = new Intent(MiniYamb.this, MiniYambOpponent.class);
+                goToOpp.putExtra("opponent", opponentUID);
+                startActivity(goToOpp);
+                break;
+
         }
     }
 
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if (mp_dice != null)
+            mp_dice.release();
+        if (mp_erase != null)
+            mp_erase.release();
+        if (mp_select != null)
+            mp_select.release();
+        if (mp_write != null)
+            mp_write.release();
+        if (mp_coins != null)
+            mp_coins.release();
     }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-   //     String text = editable.toString();
-     //   switch (p.getId()){
-       //     case R.id.down_sum1:
-         //   yamb_sum1.setText(String.valueOf(7));
-           // break;
-
-    }
-    }
-
+}

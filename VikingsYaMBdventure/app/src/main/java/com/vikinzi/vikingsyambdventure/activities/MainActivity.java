@@ -1,27 +1,20 @@
 package com.vikinzi.vikingsyambdventure.activities;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-//import com.vikinzi.vikingsyambdventure.GlideApp;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-import com.vikinzi.vikingsyambdventure.GlideApp;
+import com.google.firebase.database.ValueEventListener;
 import com.vikinzi.vikingsyambdventure.R;
 
 
@@ -29,14 +22,16 @@ public class MainActivity extends AppCompatActivity implements
         View.OnClickListener
 {
 
+    private int pic = 0;
+
     @Override
     public void onClick(View v)
     {
         Intent i;
         switch (v.getId()) {
 
-            case R.id.learnmode:
-                i = new Intent(MainActivity.this, LearnModeActivity.class);
+            case R.id.singleplayer:
+                i = new Intent(MainActivity.this, NewSinglePlayerActivity.class);
                 startActivity(i);
                 break;
 
@@ -45,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(i);
                 break;
 
-            case R.id.ranglist:
-                i = new Intent(MainActivity.this, RangListActivity.class);
-                startActivity(i);
-                break;
+//            case R.id.ranglist:
+//                i = new Intent(MainActivity.this, RangListActivity.class);
+//                startActivity(i);
+//                break;
 
             case R.id.properties:
                 i = new Intent(MainActivity.this, PropertiesActivity.class);
@@ -64,39 +59,67 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.profile:
 
                 i = new Intent(MainActivity.this, ProfileActivity.class);
+                i.putExtra("Background", 0);
                 startActivity(i);
                 break;
         }
     }
-    ImageButton lm, gr, rl, p, ng, prof;
+    ImageButton sp, gr, rl, p, ng, prof;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
      //   requestWindowFeature(Window.FEATURE_NO_TITLE);
      //   getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference Ref = database.getReference("users");
+        DatabaseReference ChildRef = Ref.child(auth.getUid());
+        DatabaseReference profPic = ChildRef.child("pic");
 
-        ImageButton lm = (ImageButton) findViewById(R.id.learnmode);
-        lm.setOnClickListener(this); // calling onClick() method
+
+
+        ImageButton sp = (ImageButton) findViewById(R.id.singleplayer);
+        sp.setOnClickListener(this);
         ImageButton gr = (ImageButton) findViewById(R.id.gamerules);
         gr.setOnClickListener(this);
-        ImageButton rl = (ImageButton) findViewById(R.id.ranglist);
-        rl.setOnClickListener(this);
+//        ImageButton rl = (ImageButton) findViewById(R.id.ranglist);
+//        rl.setOnClickListener(this);
         ImageButton p = (ImageButton) findViewById(R.id.properties);
         p.setOnClickListener(this);
         ImageButton ng = (ImageButton) findViewById(R.id.newgame);
         ng.setOnClickListener(this);
-        ImageButton prof = (ImageButton) findViewById(R.id.profile);
+        final ImageButton prof = (ImageButton) findViewById(R.id.profile);
         prof.setOnClickListener(this);
 
-        //
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        profPic.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                pic = dataSnapshot.getValue(int.class);
+                switch(pic){
+                    case 0:
+                        prof.setBackgroundResource(R.drawable.avatar_ridji);
+                        break;
+                    case 1:
+                        prof.setBackgroundResource(R.drawable.avatar_plavi);
+                        break;
+                    case 2:
+                        prof.setBackgroundResource(R.drawable.avatar_zeleni);
+                        break;
+                }
+            }
 
-        myRef.setValue("Hello, World!");
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                auth.signOut();
+            }
+        });
+
+
 
 
         // Read from the database

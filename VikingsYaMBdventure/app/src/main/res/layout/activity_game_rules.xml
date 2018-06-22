@@ -104,7 +104,7 @@
                 android:id="@+id/img_gamerules1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules1"
+                android:src="@drawable/gamerules_ones"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamerules1"/>
@@ -129,7 +129,7 @@
                 android:id="@+id/img_gamerules2"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules2"
+                android:src="@drawable/gamerules_max"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamerules2"/>
@@ -153,7 +153,7 @@
                 android:id="@+id/img_gamerules3"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules3"
+                android:src="@drawable/gamerules_min"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamerules3"/>
@@ -177,10 +177,19 @@
                 android:id="@+id/img_gamerules4"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules4"
+                android:src="@drawable/gamerules_straight1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamerules4"/>
+
+            <ImageView
+                android:id="@+id/img_gamerules5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:src="@drawable/gamerules_straight2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/img_gamerules4"/>
 
             <TextView
                 android:id="@+id/gamerules5"
@@ -193,18 +202,18 @@
                 android:textAppearance="@android:style/TextAppearance"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_gamerules4"
+                app:layout_constraintTop_toBottomOf="@id/img_gamerules5"
                 tools:layout_constraintLeft_creator="1"
                 tools:layout_constraintTop_creator="1" />
 
             <ImageView
-                android:id="@+id/img_gamerules5"
+                android:id="@+id/img_gamerules66"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules5"
+                android:src="@drawable/gamerules_three"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/gamerules4"/>
+                app:layout_constraintTop_toBottomOf="@id/gamerules5"/>
 
             <TextView
                 android:id="@+id/gamerules6"
@@ -217,7 +226,7 @@
                 android:textAppearance="@android:style/TextAppearance"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_gamerules5"
+                app:layout_constraintTop_toBottomOf="@id/img_gamerules66"
                 tools:layout_constraintLeft_creator="1"
                 tools:layout_constraintTop_creator="1" />
 
@@ -225,7 +234,7 @@
                 android:id="@+id/img_gamerules6"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules6"
+                android:src="@drawable/gamerules_full"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamerules6"/>
@@ -249,7 +258,7 @@
                 android:id="@+id/img_gamerules7"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules7"
+                android:src="@drawable/gamerules_poker"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamerules7"/>
@@ -273,11 +282,25 @@
                 android:id="@+id/img_gamerules8"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:src="@drawable/img_gamerules8"
+                android:src="@drawable/gamerules_yamb"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamerules8"/>
-            
+
+            <TextView
+                android:id="@+id/gamerules9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00ffffff"
+                android:padding="8dp"
+                android:text="@string/game_rules9"
+                android:textAppearance="@android:style/TextAppearance"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/img_gamerules8"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintTop_creator="1" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

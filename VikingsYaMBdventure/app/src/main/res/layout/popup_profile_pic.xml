@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="@dimen/_290sdp"
-    android:layout_height="@dimen/_250sdp"
-    android:background="@color/colorPrimaryDark"
-    android:padding="5dp"
-    android:layout_gravity="center">
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/background"
+        android:orientation="vertical"
+        android:padding="5dp">
+
     <TextView
         android:id="@+id/txtclose"
         android:layout_width="@dimen/_25sdp"
         android:layout_height="@dimen/_25sdp"
-        android:textColor="@color/white"
-        android:text="X"
-        android:textStyle="bold"
         android:layout_gravity="end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/circlebackground"
         android:gravity="center"
-        android:background="@drawable/circlebackground"/>
-    <in.goodiebag.carouselpicker.CarouselPicker
-        android:id="@+id/carouselPicker"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
+        android:text="X"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-</LinearLayout>
+        <in.goodiebag.carouselpicker.CarouselPicker
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            android:id="@+id/carouselPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="#00000000"
+            app:items_visible="three"
+            tools:layout_editor_absoluteY="606dp">
+        </in.goodiebag.carouselpicker.CarouselPicker>
+
+</android.support.constraint.ConstraintLayout>

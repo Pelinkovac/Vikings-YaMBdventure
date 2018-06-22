@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
 import com.vikinzi.vikingsyambdventure.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -26,24 +27,12 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-// ne treba - u android manifestu je podesen       setTheme(R.style.AppTheme);
-        //isto u 45 liniji
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
 
-        //ponavlja se u 58. liniji
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        //ovo treba u loading activity
-        //Nadogradi da proveri da li postoji kao korisnik
-        if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        }
-
-        // set the view now
- //       setContentView(R.layout.activity_login);
 
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
@@ -54,9 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup = (Button) findViewById(R.id.btn_signup);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
-
-        //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.40" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <android.support.constraint.Guideline
         android:id="@+id/hguideline2"
@@ -65,12 +65,12 @@
         app:layout_constraintGuide_percent="0.03" />
 
     <ImageButton
-        android:id="@+id/learnmode"
+        android:id="@+id/singleplayer"
         android:layout_width="@dimen/_130sdp"
         android:layout_height="@dimen/_40sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:background="@drawable/btn_learnmode"
-        app:layout_constraintBottom_toTopOf="@+id/gamerules"
+        android:background="@drawable/btn_single_player"
+        android:contentDescription="@string/action_settings"
         app:layout_constraintLeft_toLeftOf="@id/vguideline1"
         app:layout_constraintTop_toTopOf="@id/hguideline1" />
 
@@ -83,17 +83,8 @@
         android:background="@drawable/btn_gamerules"
         android:contentDescription="@string/action_settings"
         app:layout_constraintLeft_toLeftOf="@id/vguideline1"
-        app:layout_constraintTop_toBottomOf="@id/learnmode" />
+        app:layout_constraintTop_toBottomOf="@id/singleplayer" />
 
-    <ImageButton
-        android:id="@+id/ranglist"
-        android:layout_width="@dimen/_130sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:background="@drawable/btn_ranglist"
-        android:contentDescription="@string/action_settings"
-        app:layout_constraintLeft_toLeftOf="@id/vguideline1"
-        app:layout_constraintTop_toBottomOf="@id/gamerules" />
 
     <ImageButton
         android:id="@+id/properties"
@@ -103,7 +94,7 @@
         android:background="@drawable/btn_properties"
         android:contentDescription="@string/action_settings"
         app:layout_constraintLeft_toLeftOf="@id/vguideline1"
-        app:layout_constraintTop_toBottomOf="@id/ranglist" />
+        app:layout_constraintTop_toBottomOf="@id/gamerules" />
 
     <ImageButton
         android:id="@+id/newgame"
@@ -118,9 +109,9 @@
 
     <ImageButton
         android:id="@+id/profile"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:background="@drawable/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
         android:contentDescription="@string/action_settings"
         app:layout_constraintLeft_toRightOf="@id/vguideline1"
         app:layout_constraintTop_toTopOf="@id/hguideline4" />

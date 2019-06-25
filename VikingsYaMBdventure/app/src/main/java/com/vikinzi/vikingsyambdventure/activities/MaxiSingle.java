@@ -159,6 +159,9 @@ public class MaxiSingle extends AppCompatActivity  implements
     ImageView play;
     ImageView profile;
 
+    TextView win;
+    ImageView profilepop;
+
 
 
     ImageView eraser, help1, help2, help3;
@@ -185,7 +188,7 @@ public class MaxiSingle extends AppCompatActivity  implements
 
     private FirebaseAuth auth;
     private FirebaseDatabase database;
-    private DatabaseReference parRef, myRef, profileRef;
+    private DatabaseReference parRef, myRef, profileRef, coinsRef;
 
     Typeface enchantedLandFont;
 
@@ -475,6 +478,18 @@ public class MaxiSingle extends AppCompatActivity  implements
 
             }
         });
+        coinsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                coins = dataSnapshot.getValue(int.class);
+                txt_coins.setText(String.valueOf(coins));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void initData() {
@@ -484,6 +499,7 @@ public class MaxiSingle extends AppCompatActivity  implements
         parRef = database.getReference("users");
         myRef = parRef.child(auth.getUid());
         profileRef = myRef.child("pic");
+        coinsRef = myRef.child("coins");
 
         arrayCeo = new Integer[78];
         for (int i = 0; i < 78; i++)
@@ -501,6 +517,31 @@ public class MaxiSingle extends AppCompatActivity  implements
             arrayDicesValue1[i]=0;
         }
         played(0);
+        //redundant if ValueEventListener loads initial values, first check it
+        coinsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                coins = dataSnapshot.getValue(int.class);
+                txt_coins.setText(String.valueOf(coins));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        myRef.child("total").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int totalNum = dataSnapshot.getValue(int.class);
+                myRef.child("total").setValue(++totalNum);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         eraser.setClickable(false);
 
         mp_dice = MediaPlayer.create(this, R.raw.rolldices);
@@ -511,7 +552,7 @@ public class MaxiSingle extends AppCompatActivity  implements
 
         sharedPreferences = getApplicationContext().getSharedPreferences("Sound", MODE_PRIVATE);
         soundON = sharedPreferences.getBoolean("soundON", true);
-        txt_coins.setText(String.valueOf(coins));
+
 
         Typeface enchantedLandFont = Typeface.createFromAsset(getAssets(), "fonts/enchanted_land.ttf");
 
@@ -871,7 +912,7 @@ public class MaxiSingle extends AppCompatActivity  implements
             }
             if(x == 5 && sum !=0){
                 coins += 200;
-                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
             }
         }
         return sum;
@@ -970,6 +1011,18 @@ public class MaxiSingle extends AppCompatActivity  implements
             sum5 = (arrayCeo[58] - arrayCeo[59]) * arrayCeo[52];
         if (arrayCeo[71] != -1 && arrayCeo[72] != -1)
             sum6 = (arrayCeo[71] - arrayCeo[72]) * arrayCeo[65];
+        if (sum1 >= 60)
+            sum1 += 30;
+        if (sum2 >= 60)
+            sum2 += 30;
+        if (sum3 >= 60)
+            sum3 += 30;
+        if (sum4 >= 60)
+            sum4 += 30;
+        if (sum5 >= 60)
+            sum5 += 30;
+        if (sum6 >= 60)
+            sum6 += 30;
         sum = sum1+sum2+sum3+sum4+sum5+sum6;
         if(sum1 != 0)
             down_sum2.setText(String.valueOf(sum1));
@@ -1122,7 +1175,7 @@ public class MaxiSingle extends AppCompatActivity  implements
     public void BackValue() {
         if ((value == 12 || value == 25 || value == 38 || value == 51 || value == 64 || value == 77) && arrayCeo[value] != 0){
             coins -= 200;
-            txt_coins.setText(String.valueOf(coins));
+            coinsRef.setValue(coins);
         }
         arrayCeo[value] = -1;
         back.setText("");
@@ -1160,7 +1213,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                 back = hand_1;
                 played(39);
                 coins -= 100;
-                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
                 eraser.setClickable(false);
                 if(soundON)
                     mp_coins.start();
@@ -1171,7 +1224,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                 back = down_1;
                 played(0);
                 coins -= 100;
-                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
                 eraser.setClickable(false);
                 if(soundON)
                     mp_coins.start();
@@ -1185,7 +1238,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                 back = hand_min;
                 played(46);
                 coins -= 150;
-                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
                 eraser.setClickable(false);
                 if(soundON)
                     mp_coins.start();
@@ -1195,7 +1248,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                 back = hand_max;
                 played(45);
                 coins -= 150;
-                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
                 eraser.setClickable(false);
                 if(soundON)
                     mp_coins.start();
@@ -1209,7 +1262,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                 back = hand_yamb;
                 played(51);
                 coins -= 200;
-                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
                 eraser.setClickable(false);
                 if (soundON)
                     mp_coins.start();
@@ -1219,7 +1272,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                 back = up_yamb;
                 played(25);
                 coins -= 200;
-                txt_coins.setText(String.valueOf(coins));
+                coinsRef.setValue(coins);
                 eraser.setClickable(false);
                 if (soundON)
                     mp_coins.start();
@@ -1233,6 +1286,8 @@ public class MaxiSingle extends AppCompatActivity  implements
         if(coins < 200 && imageView == help3)
             Toast.makeText(this, "Not enough coins", Toast.LENGTH_SHORT).show();
 
+
+
         yamb_sumtotal.setText(String.valueOf(oneToSixSum() + MaxMinSum() + TheLastOne()));
         if (yamb_sumtotal.getText().toString().equals("0"))
             yamb_sumtotal.setText("");
@@ -1245,13 +1300,25 @@ public class MaxiSingle extends AppCompatActivity  implements
             if (arrayCeo[i] == -1)
                 n++;
         if(n == 0) {
+            myRef.child("wins").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int winNum = dataSnapshot.getValue(int.class);
+                    myRef.child("wins").setValue(++winNum);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
             popupDialog = new Dialog(this);
-            popupDialog.setContentView(R.layout.popup_endgame);
+            popupDialog.setContentView(R.layout.popup_endgamesingle);
             popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             popupDialog.show();
-            popupDialog.setCancelable(false);
-            TextView win;
-            final ImageView profilepop;
+            //popupDialog.setCancelable(false);
+            //TextView win;
+            //final ImageView profilepop;
             profilepop = (ImageView) popupDialog.findViewById(R.id.profile);
             win = (TextView) popupDialog.findViewById(R.id.points_win);
             win.setText(yamb_sumtotal.toString());
@@ -1676,7 +1743,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(6, down_max);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.down_min:
@@ -1684,7 +1751,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(7, down_min);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.up_max:
@@ -1692,7 +1759,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(19, up_max);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.up_min:
@@ -1700,7 +1767,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(20, up_min);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.free_max:
@@ -1708,7 +1775,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(32, free_max);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.free_min:
@@ -1716,7 +1783,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(33, free_min);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.hand_max:
@@ -1724,7 +1791,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(45, hand_max);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.hand_min:
@@ -1732,7 +1799,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(46, hand_min);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.sides_max:
@@ -1740,7 +1807,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(71, sides_max);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.sides_min:
@@ -1748,7 +1815,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(72, sides_min);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.center_max:
@@ -1756,7 +1823,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(58, center_max);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
 
                 case R.id.center_min:
@@ -1764,7 +1831,7 @@ public class MaxiSingle extends AppCompatActivity  implements
                         if (maxMin == 5)
                             SVE(59, center_min);
                         else
-                            Toast.makeText(this, "You must select 5 dice", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "You must select 5 dices", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -1772,8 +1839,11 @@ public class MaxiSingle extends AppCompatActivity  implements
 
         switch (v.getId()) {
             case R.id.play:
-                if (soundON)
+                if (soundON) {
+                    mp_dice.stop();
+                    //mp_dice.prepare();
                     mp_dice.start();
+                }
                 swapPlay(play);
                 break;
 

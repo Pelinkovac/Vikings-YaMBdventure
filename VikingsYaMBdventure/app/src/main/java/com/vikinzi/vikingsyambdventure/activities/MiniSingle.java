@@ -466,7 +466,6 @@ public class MiniSingle extends AppCompatActivity  implements
         }
         if (yamb_sumtotal.getText().toString().equals("0"))
             yamb_sumtotal.setText("");
-        //TODO update baze pri upisu
         End();
 
     }
@@ -829,6 +828,14 @@ public class MiniSingle extends AppCompatActivity  implements
             sum3 = (arrayCeo[32] - arrayCeo[33]) * arrayCeo[26];
         if (arrayCeo[39] != -1 && arrayCeo[45] != -1 && arrayCeo[46] != -1)
             sum4 = (arrayCeo[45] - arrayCeo[46]) * arrayCeo[39];
+        if (sum1 >= 60)
+            sum1 += 30;
+        if (sum2 >= 60)
+            sum2 += 30;
+        if (sum3 >= 60)
+            sum3 += 30;
+        if (sum4 >= 60)
+            sum4 += 30;
         sum = sum1 + sum2 + sum3 + sum4;
         if (sum1 != 0)
             down_sum2.setText(String.valueOf(sum1));

@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vikinzi.vikingsyambdventure.GlideApp;
 import com.vikinzi.vikingsyambdventure.R;
+
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -135,11 +138,9 @@ public class MiniYamb extends AppCompatActivity  implements
 
 
 
-//    Down Down;
-
     //Arrays for TextViews values of all columns
     int[] arrayDicesValue,  arrayDicesValue1;
-    Integer[] arrayCeo;
+    Integer[] arrayCeo, oppArrayCeo;
     boolean[] arrayDicesState, arrayDicesState1;
     int numOfThrows = 0;
     int value = 0;
@@ -399,6 +400,23 @@ public class MiniYamb extends AppCompatActivity  implements
             }
         });
 
+        oppRef.child("tabela").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int i = 0;
+                for (DataSnapshot tableElementSnapshot: dataSnapshot.getChildren()) {
+                    oppArrayCeo[i] = tableElementSnapshot.getValue(Integer.class);
+                    i++;
+                    End();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void initData() {
@@ -417,8 +435,10 @@ public class MiniYamb extends AppCompatActivity  implements
         profileRef = oppRef.child("pic");
 
         arrayCeo = new Integer[52];
-        for (int i = 0; i < 52; i++)
+        for (int i = 0; i < 52; i++) {
             arrayCeo[i] = -1;
+            oppArrayCeo[i] = -1;
+        }
         tabelaRef.setValue(Arrays.asList(arrayCeo));
 
         arrayDicesValue = new int[6];
@@ -1123,19 +1143,41 @@ public class MiniYamb extends AppCompatActivity  implements
     }
 
     public void End() {
-        int n = 0;
-        for (int i = 0; i < 52; i++)
+        int i, oppPoints = 0;
+        for (i = 0; i < 52; i++) {
             if (arrayCeo[i] == -1)
-                n++;
-        if (n == 0) {
+                break;
+            oppPoints += oppArrayCeo[i];
+        }
+        if (i == 52 && oppEnd()) {
             popupDialog = new Dialog(this);
             popupDialog.setContentView(R.layout.popup_endgame);
+            ImageView profile_win = (ImageView) popupDialog.findViewById(R.id.profile_win);
+            final TextView nick_win = (TextView) popupDialog.findViewById(R.id.nick_win);
+            TextView points_win = (TextView) popupDialog.findViewById(R.id.points_win);
+            ImageView profile_lose = (ImageView) popupDialog.findViewById(R.id.profile_lose);
+            TextView nick_lose = (TextView) popupDialog.findViewById(R.id.nick_lose);
+            TextView points_lose = (TextView) popupDialog.findViewById(R.id.points_lose);
+            if(oneToSixSum() + MaxMinSum() + TheLastOne() > oppPoints) {
+                points_win.setText(yamb_sumtotal.toString());//TODO finish here
+            }
+
+
             popupDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             popupDialog.show();
-            TextView win;
-            win = (TextView) popupDialog.findViewById(R.id.points_win);
-            win.setText(yamb_sumtotal.toString());
+
         }
+    }
+
+    public boolean oppEnd(){
+        int i;
+        for (i = 0; i < 52; i++)
+            if(oppArrayCeo[i] == -1)
+                break;
+        if(i != 52)
+            return false;
+        else
+            return true;
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {

@@ -158,8 +158,8 @@ public class MiniYambOpponent extends AppCompatActivity implements View.OnClickL
                 //List<Integer> temp = (List<Integer>) dataSnapshot.getValue();
                 //temp.toArray(niz);
                 int i = 0;
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    niz[i] = postSnapshot.getValue(Integer.class);
+                for (DataSnapshot tableElementSnapshot: dataSnapshot.getChildren()) {
+                    niz[i] = tableElementSnapshot.getValue(Integer.class);
                     i++;
                 }
                 populateTable(niz);

@@ -80,7 +80,7 @@
         <b>"\n Rolling dice \n "</b>
         "Player takes turn rolling six dice. After each roll, he chooses which dice (if any) to keep, "
         "and which to re-roll. The player may re-roll some or all of the dice up to three times on a turn. "
-        "After ends his turn, player scores his best matching result by combining only five dice. \n"
+        "After ends his turn, player scores his best matching result by combining only five dices. \n"
 
         <b>"\n Column down \n "</b>
         "In the first column, the order of scoring is from top to bottom. \n"
@@ -144,7 +144,7 @@
     <string name="game_rules8">
         " = 16 + 40 = 56 points \n"
         <b>"\n "Y" - Yamb row \n "</b>
-        "This is the most valuable field in the game. You need to collect 5 equal dice. For each Yamb you will be awarded with 50 bonus points.\n"
+        "This is the most valuable field in the game. You need to collect 5 equal dices. For each Yamb you will be awarded with 50 bonus points.\n"
     </string>
     <string name="game_rules9">
         " = 30 + 50 = 80 points \n"
